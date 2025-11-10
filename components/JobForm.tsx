@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface JobFormProps {
   job?: {
     id: string
     title: string
+    jobType: string
     description: string
     details: string | null
     skills: string[]
@@ -24,6 +26,7 @@ export default function JobForm({ job }: JobFormProps) {
   const [error, setError] = useState("")
   const [skills, setSkills] = useState<string[]>(job?.skills || [])
   const [skillInput, setSkillInput] = useState("")
+  const [jobType, setJobType] = useState(job?.jobType || "engineering")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -33,6 +36,7 @@ export default function JobForm({ job }: JobFormProps) {
     const formData = new FormData(e.currentTarget)
     const data = {
       title: formData.get("title"),
+      jobType,
       description: formData.get("description"),
       details: formData.get("details"),
       skills,
@@ -78,6 +82,20 @@ export default function JobForm({ job }: JobFormProps) {
       <div>
         <Label htmlFor="title">Job Title *</Label>
         <Input id="title" name="title" required defaultValue={job?.title} />
+      </div>
+
+      <div>
+        <Label htmlFor="jobType">Job Type *</Label>
+        <Select value={jobType} onValueChange={setJobType}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select job type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="engineering">Engineering Roles</SelectItem>
+            <SelectItem value="other">Other Roles</SelectItem>
+            <SelectItem value="internship">Internships</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div>

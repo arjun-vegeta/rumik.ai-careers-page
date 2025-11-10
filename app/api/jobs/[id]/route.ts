@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -13,12 +13,14 @@ export async function PUT(
     }
 
     const body = await req.json()
-    const { title, description, details, skills, isActive } = body
+    const { title, jobType, description, details, skills, isActive } = body
+    const { id } = await params
 
     const job = await prisma.job.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
+        jobType: jobType || "engineering",
         description,
         details: details || null,
         skills,

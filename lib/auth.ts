@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google" && user.email) {
-        const adminEmails = process.env.ADMIN_EMAILS?.split(',') || []
+        const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || []
         const role = adminEmails.includes(user.email) ? 'recruiter' : 'applicant'
         
         await prisma.user.upsert({
@@ -31,17 +31,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true
     },
-    async session({ session }) {
-      if (session.user?.email) {
+    async jwt({ token, user, account }) {
+      if (account?.provider === "google" && user?.email) {
+        const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || []
+        const role = adminEmails.includes(user.email) ? 'recruiter' : 'applicant'
+        
         const dbUser = await prisma.user.findUnique({
-          where: { email: session.user.email },
+          where: { email: user.email },
         })
+        
         if (dbUser) {
-          session.user.id = dbUser.id
-          session.user.role = dbUser.role
+          token.id = dbUser.id
+          token.role = dbUser.role
+        } else {
+          token.role = role
         }
       }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
+      }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // After sign in, redirect to home page
+      if (url.startsWith(baseUrl)) return url
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      return baseUrl
     },
   },
   pages: {

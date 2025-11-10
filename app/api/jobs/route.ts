@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { title, description, details, skills, isActive } = body
+    const { title, jobType, description, details, skills, isActive } = body
 
     if (!title || !description || !skills) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const job = await prisma.job.create({
       data: {
         title,
+        jobType: jobType || "engineering",
         description,
         details: details || null,
         skills,

@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import AIInsightButton from "@/components/AIInsightButton"
 
-export default async function CandidateDetailPage({ params }: { params: { id: string } }) {
+export default async function CandidateDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const candidate = await prisma.candidate.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       job: true,
       user: true,

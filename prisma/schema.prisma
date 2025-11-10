@@ -27,6 +27,7 @@ model User {
 model Job {
   id          String      @id @default(cuid())
   title       String
+  jobType     String      @default("engineering") // engineering, other, internship
   description String      @db.Text
   details     String?     @db.Text
   skills      String[]

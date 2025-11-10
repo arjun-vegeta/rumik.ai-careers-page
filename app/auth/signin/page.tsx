@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { signIn } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default function SignInPage() {
   return (
@@ -16,7 +17,7 @@ export default function SignInPage() {
           <form
             action={async () => {
               "use server"
-              await signIn("google")
+              await signIn("google", { redirectTo: "/" })
             }}
           >
             <Button 
