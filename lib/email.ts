@@ -1,3 +1,7 @@
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
 interface SendApplicationConfirmationParams {
   candidateName: string
   candidateEmail: string
@@ -13,8 +17,6 @@ export async function sendApplicationConfirmation({
 }: SendApplicationConfirmationParams) {
   try {
     console.log("Attempting to send email to:", candidateEmail)
-    console.log("Brevo API Key exists:", !!process.env.BREVO_API_KEY)
-    console.log("Brevo Sender Email:", process.env.BREVO_SENDER_EMAIL)
     
     const htmlContent = `
       <!DOCTYPE html>
@@ -54,37 +56,19 @@ export async function sendApplicationConfirmation({
       </html>
     `
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "accept": "application/json",
-        "api-key": process.env.BREVO_API_KEY || "",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        sender: {
-          name: companyName,
-          email: process.env.BREVO_SENDER_EMAIL || "noreply@rumik.ai",
-        },
-        to: [
-          {
-            email: candidateEmail,
-            name: candidateName,
-          },
-        ],
-        subject: `Application Received - ${jobTitle}`,
-        htmlContent,
-      }),
+    const { data, error } = await resend.emails.send({
+      from: `${companyName} <onboarding@resend.dev>`,
+      to: [candidateEmail],
+      subject: `Application Received - ${jobTitle}`,
+      html: htmlContent,
     })
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      console.error("Brevo API error response:", response.status, errorData)
-      return { success: false, error: errorData }
+    if (error) {
+      console.error("Resend API error:", error)
+      return { success: false, error }
     }
 
-    const responseData = await response.json()
-    console.log("Email sent successfully! Response:", responseData)
+    console.log("Email sent successfully! ID:", data?.id)
     console.log("Application confirmation email sent to:", candidateEmail)
     return { success: true }
   } catch (error) {
