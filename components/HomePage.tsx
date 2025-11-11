@@ -264,7 +264,7 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-end justify-end">
-            <p className="text-lg">&copy; 2025 - Rumik AI</p>
+            <p className="text-lg text-[#FFF4B3]">&copy; 2025 - Rumik AI</p>
           </div>
         </div>
       </footer>

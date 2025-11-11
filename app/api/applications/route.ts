@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
 import { existsSync } from "fs"
+import { sendApplicationConfirmation } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
   try {
@@ -62,6 +63,13 @@ export async function POST(req: NextRequest) {
         resumeUrl,
       },
     })
+
+    // Send confirmation email (non-blocking)
+    sendApplicationConfirmation({
+      candidateName: name,
+      candidateEmail: email,
+      jobTitle: job.title,
+    }).catch((err) => console.error("Failed to send confirmation email:", err))
 
     return NextResponse.json({ success: true, candidate })
   } catch (error: any) {

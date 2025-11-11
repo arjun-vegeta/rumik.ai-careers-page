@@ -98,11 +98,14 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
       </Link>
 
       <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
-        <Link className="hover:underline" href="/roles" prefetch={true}>
-          Roles
+        <Link className="relative group cursor-pointer" href="/roles" prefetch={true}>
+          <span className="relative">
+            Roles
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
+          </span>
         </Link>
         <Link 
-          className="hover:underline cursor-pointer" 
+          className="relative group cursor-pointer" 
           href="/#benefits"
           onClick={(e) => {
             const benefitsSection = document.getElementById('benefits');
@@ -113,13 +116,22 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
             // If not on homepage, let the Link navigate normally
           }}
         >
-          Benefits
+          <span className="relative">
+            Benefits
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
+          </span>
         </Link>
-        <a className="hover:underline" href="https://rumik.ai/blogs" target="_blank" rel="noopener noreferrer">
-          Blogs
+        <a className="relative group cursor-pointer" href="https://rumik.ai/blogs" target="_blank" rel="noopener noreferrer">
+          <span className="relative">
+            Blogs
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
+          </span>
         </a>
-        <a className="hover:underline" href="https://rumik.ai/" target="_blank" rel="noopener noreferrer">
-          About Us
+        <a className="relative group cursor-pointer" href="https://rumik.ai/" target="_blank" rel="noopener noreferrer">
+          <span className="relative">
+            About Us
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
+          </span>
         </a>
       </nav>
 
