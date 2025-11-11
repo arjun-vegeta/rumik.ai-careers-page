@@ -12,6 +12,10 @@ export async function sendApplicationConfirmation({
   companyName = "Rumik.ai",
 }: SendApplicationConfirmationParams) {
   try {
+    console.log("Attempting to send email to:", candidateEmail)
+    console.log("Brevo API Key exists:", !!process.env.BREVO_API_KEY)
+    console.log("Brevo Sender Email:", process.env.BREVO_SENDER_EMAIL)
+    
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -75,10 +79,12 @@ export async function sendApplicationConfirmation({
 
     if (!response.ok) {
       const errorData = await response.json()
-      console.error("Brevo API error:", errorData)
+      console.error("Brevo API error response:", response.status, errorData)
       return { success: false, error: errorData }
     }
 
+    const responseData = await response.json()
+    console.log("Email sent successfully! Response:", responseData)
     console.log("Application confirmation email sent to:", candidateEmail)
     return { success: true }
   } catch (error) {
