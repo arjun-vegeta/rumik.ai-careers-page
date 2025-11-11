@@ -1,11 +1,3 @@
-import * as brevo from "@getbrevo/brevo"
-
-const apiInstance = new brevo.TransactionalEmailsApi()
-apiInstance.setApiKey(
-  brevo.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY || ""
-)
-
 interface SendApplicationConfirmationParams {
   candidateName: string
   candidateEmail: string
@@ -20,15 +12,7 @@ export async function sendApplicationConfirmation({
   companyName = "Rumik.ai",
 }: SendApplicationConfirmationParams) {
   try {
-    const sendSmtpEmail = new brevo.SendSmtpEmail()
-
-    sendSmtpEmail.subject = `Application Received - ${jobTitle}`
-    sendSmtpEmail.to = [{ email: candidateEmail, name: candidateName }]
-    sendSmtpEmail.sender = {
-      name: companyName,
-      email: process.env.BREVO_SENDER_EMAIL || "noreply@rumik.ai",
-    }
-    sendSmtpEmail.htmlContent = `
+    const htmlContent = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -66,7 +50,35 @@ export async function sendApplicationConfirmation({
       </html>
     `
 
-    await apiInstance.sendTransacEmail(sendSmtpEmail)
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "api-key": process.env.BREVO_API_KEY || "",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        sender: {
+          name: companyName,
+          email: process.env.BREVO_SENDER_EMAIL || "noreply@rumik.ai",
+        },
+        to: [
+          {
+            email: candidateEmail,
+            name: candidateName,
+          },
+        ],
+        subject: `Application Received - ${jobTitle}`,
+        htmlContent,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("Brevo API error:", errorData)
+      return { success: false, error: errorData }
+    }
+
     console.log("Application confirmation email sent to:", candidateEmail)
     return { success: true }
   } catch (error) {
