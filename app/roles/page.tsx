@@ -1,128 +1,43 @@
 import { prisma } from "@/lib/prisma"
-import { auth, signOut } from "@/lib/auth"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+import Navbar from "@/components/Navbar"
+import RolesClient from "./RolesClient"
+import { Suspense } from "react"
+import ToastHandler from "@/components/ToastHandler"
 
 export default async function RolesPage() {
-  const session = await auth()
-  const jobs = await prisma.job.findMany({
+  const allJobs = await prisma.job.findMany({
     where: { isActive: true },
-    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      jobType: true,
+      salary: true,
+    },
   })
 
-  const engineeringJobs = jobs.filter(j => j.jobType === 'engineering')
-  const otherJobs = jobs.filter(j => j.jobType === 'other')
-  const internships = jobs.filter(j => j.jobType === 'internship')
-
-  const JobCard = ({ job }: { job: any }) => (
-    <Card key={job.id} className="hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-2xl mb-2">{job.title}</CardTitle>
-            <CardDescription className="text-base">
-              {job.description.substring(0, 200)}...
-            </CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {job.skills.map((skill: string) => (
-            <Badge key={skill} variant="secondary">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-        <Link href={`/jobs/${job.id}`}>
-          <Button className="bg-black text-[#FFF4B3] hover:bg-gray-800">
-            View Details & Apply
-          </Button>
-        </Link>
-      </CardContent>
-    </Card>
-  )
+  // Sort jobs: engineering first, then other, then internship
+  const jobs = allJobs.sort((a, b) => {
+    const order = { engineering: 1, other: 2, internship: 3 }
+    return order[a.jobType as keyof typeof order] - order[b.jobType as keyof typeof order]
+  })
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-gray-200 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-          <Link href="/" className="text-3xl font-bold hover:opacity-80">
-            Careers
-          </Link>
-          <div className="flex gap-4 items-center">
-            {session?.user ? (
-              <>
-                <span className="text-sm text-gray-600">{session.user.email}</span>
-                {session.user.role === 'recruiter' ? (
-                  <Link href="/admin">
-                    <Button variant="outline">Admin Dashboard</Button>
-                  </Link>
-                ) : (
-                  <Link href="/applications">
-                    <Button variant="outline">My Applications</Button>
-                  </Link>
-                )}
-                <form
-                  action={async () => {
-                    "use server"
-                    await signOut({ redirectTo: "/" })
-                  }}
-                >
-                  <Button variant="ghost" type="submit">Logout</Button>
-                </form>
-              </>
-            ) : (
-              <Link href="/auth/signin">
-                <Button variant="outline">Sign In</Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FCFAF7]">
+      <Navbar />
+      <Suspense fallback={null}>
+        <ToastHandler />
+      </Suspense>
 
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-12">
-          <h2 className="text-4xl font-bold mb-4">✅ Open Roles</h2>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Open Roles</h1>
           <p className="text-gray-600 text-lg">
-            We're looking for talented individuals to help us build the future.
+            Join our team and help us build the most human AI.
           </p>
         </div>
 
-        {jobs.length === 0 ? (
-          <p className="text-gray-500 text-center py-12">No open positions at the moment.</p>
-        ) : (
-          <div className="space-y-12">
-            {engineeringJobs.length > 0 && (
-              <section id="engineering">
-                <h3 className="text-2xl font-bold mb-6">Engineering Roles</h3>
-                <div className="grid gap-6">
-                  {engineeringJobs.map((job) => <JobCard key={job.id} job={job} />)}
-                </div>
-              </section>
-            )}
-
-            {otherJobs.length > 0 && (
-              <section id="other">
-                <h3 className="text-2xl font-bold mb-6">Other Roles</h3>
-                <div className="grid gap-6">
-                  {otherJobs.map((job) => <JobCard key={job.id} job={job} />)}
-                </div>
-              </section>
-            )}
-
-            {internships.length > 0 && (
-              <section id="internships">
-                <h3 className="text-2xl font-bold mb-6">👷 Internships</h3>
-                <div className="grid gap-6">
-                  {internships.map((job) => <JobCard key={job.id} job={job} />)}
-                </div>
-              </section>
-            )}
-          </div>
-        )}
+        <RolesClient jobs={jobs} />
       </main>
     </div>
   )

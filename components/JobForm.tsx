@@ -79,15 +79,15 @@ export default function JobForm({ job }: JobFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="title">Job Title *</Label>
-        <Input id="title" name="title" required defaultValue={job?.title} />
+        <Input id="title" name="title" required defaultValue={job?.title} className="bg-white" />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="jobType">Job Type *</Label>
         <Select value={jobType} onValueChange={setJobType}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-white">
             <SelectValue placeholder="Select job type" />
           </SelectTrigger>
           <SelectContent>
@@ -98,7 +98,7 @@ export default function JobForm({ job }: JobFormProps) {
         </Select>
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="description">Job Description *</Label>
         <Textarea 
           id="description" 
@@ -106,20 +106,22 @@ export default function JobForm({ job }: JobFormProps) {
           required 
           rows={6}
           defaultValue={job?.description}
+          className="bg-white"
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="details">Additional Details</Label>
         <Textarea 
           id="details" 
           name="details" 
           rows={4}
           defaultValue={job?.details || ""}
+          className="bg-white"
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="skills">Skills</Label>
         <div className="flex gap-2 mb-2">
           <Input 
@@ -128,6 +130,7 @@ export default function JobForm({ job }: JobFormProps) {
             onChange={(e) => setSkillInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
             placeholder="Add a skill..."
+            className="bg-white"
           />
           <Button type="button" onClick={addSkill} variant="outline">
             Add
@@ -136,11 +139,11 @@ export default function JobForm({ job }: JobFormProps) {
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (
             <div key={skill} className="bg-gray-100 px-3 py-1 rounded-full flex items-center gap-2">
-              <span>{skill}</span>
+              <span className="text-sm">{skill}</span>
               <button
                 type="button"
                 onClick={() => removeSkill(skill)}
-                className="text-gray-500 hover:text-black"
+                className="text-gray-500 hover:text-black text-lg leading-none"
               >
                 ×
               </button>
@@ -170,7 +173,7 @@ export default function JobForm({ job }: JobFormProps) {
         <Button 
           type="submit" 
           disabled={loading}
-          className="bg-black text-[#FFF4B3] hover:bg-gray-800"
+          className="bg-black text-[#F5E69A] hover:bg-gray-800"
         >
           {loading ? "Saving..." : job ? "Update Job" : "Create Job"}
         </Button>

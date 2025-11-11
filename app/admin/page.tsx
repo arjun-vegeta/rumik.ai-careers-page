@@ -1,13 +1,16 @@
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import AdminJobsClient from "./AdminJobsClient"
 
 export default async function AdminJobsPage() {
   const jobs = await prisma.job.findMany({
     orderBy: { createdAt: 'desc' },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      jobType: true,
+      isActive: true,
       _count: {
         select: { 
           candidates: {
@@ -25,56 +28,18 @@ export default async function AdminJobsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">Job Postings</h2>
+        <div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2">Job Postings</h1>
+          <p className="text-gray-600 text-lg">Manage all job postings and view applications</p>
+        </div>
         <Link href="/admin/jobs/new">
-          <Button className="bg-black text-[#FFF4B3] hover:bg-gray-800">
+          <Button className="bg-black text-[#F5E69A] hover:bg-gray-800">
             Create New Job
           </Button>
         </Link>
       </div>
 
-      <div className="grid gap-4">
-        {jobs.map((job) => (
-          <Card key={job.id}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <Link href={`/admin/jobs/${job.id}/candidates`}>
-                    <CardTitle className="text-xl hover:text-gray-600 cursor-pointer">
-                      {job.title}
-                    </CardTitle>
-                  </Link>
-                  <div className="flex gap-2 mt-2">
-                    <Badge variant={job.isActive ? "default" : "secondary"}>
-                      {job.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                    <Link href={`/admin/jobs/${job.id}/candidates`}>
-                      <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
-                        {job._count.candidates} applicants
-                      </Badge>
-                    </Link>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Link href={`/admin/jobs/${job.id}/edit`}>
-                    <Button variant="outline" size="sm" className="w-full">Edit</Button>
-                  </Link>
-                  <Link href={`/admin/jobs/${job.id}/candidates`}>
-                    <Button variant="outline" size="sm" className="w-full">View Applicants</Button>
-                  </Link>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {job.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary">{skill}</Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <AdminJobsClient jobs={jobs} />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import WithdrawButton from "@/components/WithdrawButton"
+import Navbar from "@/components/Navbar"
 
 export default async function ApplicationsPage() {
   const session = await auth()
@@ -51,15 +52,8 @@ export default async function ApplicationsPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-gray-200 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-          <Link href="/" className="text-3xl font-bold hover:opacity-80">
-            Careers
-          </Link>
-          <span className="text-sm text-gray-600">{session.user.email}</span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FCFAF7]">
+      <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">

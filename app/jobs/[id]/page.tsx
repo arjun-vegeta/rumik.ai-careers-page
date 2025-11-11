@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import ApplyForm from "@/components/ApplyForm"
+import Navbar from "@/components/Navbar"
 
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -19,14 +18,8 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
   const session = await auth()
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-gray-200 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <Link href="/" className="text-gray-600 hover:text-black">
-            ← Back to Careers
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FCFAF7]">
+      <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 py-12">
         <div className="mb-8">

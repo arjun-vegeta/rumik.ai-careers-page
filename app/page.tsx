@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import { Manrope } from "next/font/google";
-import React, { useState } from "react";
+import React, { useState, Suspense, memo } from "react";
 import BenefitLine from "@/components/BenefitLine";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { WorldMap } from "@/components/ui/world-map";
+import Navbar from "@/components/Navbar";
+import ToastHandler from "@/components/ToastHandler";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -79,7 +82,7 @@ function CursorVisibilityController({ onChange }: { onChange: (v: boolean) => vo
   return null;
 }
 
-function RoleLink({ children }: { children: React.ReactNode }) {
+function RoleLink({ children, href }: { children: React.ReactNode; href: string }) {
   // Role link that triggers custom cursor and hides the OS cursor while hovered
   const onMouseEnter = (e: React.MouseEvent) => {
     // hide native cursor for the hovered element via style
@@ -97,7 +100,7 @@ function RoleLink({ children }: { children: React.ReactNode }) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className="block py-8 border-b border-black/30 text-[40px] sm:text-[48px] md:text-[50px] lg:text-[56px] xl:text-[66px] font-[400] text-left whitespace-nowrap"
-      href="#"
+      href={href}
     >
       {children}
     </a>
@@ -108,41 +111,13 @@ export default function Page() {
   return (
     <main className={`${manrope.className} bg-[#FCFAF7] text-black min-h-screen`}>
       <HoverCursor />
-
-      {/* Header */}
-      <header className="max-w-7xl mx-auto px-8 py-8 flex items-center justify-between">
-        <div className="w-60 h-12 relative">
-          <Image src="/careers_logo.webp" alt="rumik.ai" fill style={{ objectFit: "contain" }} />
-        </div>
-
-        <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
-          <a className="hover:underline" href="/roles">
-            Roles
-          </a>
-          <a className="hover:underline" href="#benefits">
-            Benefits
-          </a>
-          <a className="hover:underline" href="https://rumik.ai/blogs">
-            Blogs
-          </a>
-          <a className="hover:underline" href="https://rumik.ai/">
-            About Us
-          </a>
-        </nav>
-
-        <div>
-          <a
-            href="/auth/signin"
-            className="inline-flex items-center gap-2 rounded-full bg-black text-[#F5E69A] px-6 py-3 text-base font-semibold shadow"
-            aria-label="Login"
-          >
-            Login <ArrowRight size={18} />
-          </a>
-        </div>
-      </header>
+      <Navbar />
+      <Suspense fallback={null}>
+        <ToastHandler />
+      </Suspense>
 
       {/* Hero */}
-      <section className="relative max-w-7xl mx-auto px-6 pt-12 pb-16 md:pb-24 flex flex-col md:flex-row items-start md:items-center">
+      <section className="relative max-w-7xl mx-auto px-6 pt-12 pb-16 md:pb-24 flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-1/2 pt-0 md:pt-12">
           <h1 className="text-[48px] sm:text-[48px] md:text-[50px] lg:text-[56px] xl:text-[66px] leading-[1.3] font-[400] max-w-xl">
             Come build
@@ -161,10 +136,46 @@ export default function Page() {
           </div>
         </div>
 
-        {/* map image on the right */}
-        <div className="w-full md:w-1/2 relative mt-8 md:mt-0 md:pl-12">
-          <div className="w-full h-[220px] md:h-[380px] relative">
-            <Image src="/map.webp" alt="map" fill style={{ objectFit: "contain" }} priority />
+        {/* world map on the right */}
+        <div className="w-full md:w-1/2 flex items-center justify-center">
+          <div className="w-full">
+            <WorldMap 
+              dots={[
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India (center)
+                  end: { lat: 37.7749, lng: -122.4194 }, // San Francisco
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: 51.5074, lng: -0.1278 }, // London
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: 40.7128, lng: -74.0060 }, // New York
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: 35.6762, lng: 139.6503 }, // Tokyo
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: 1.3521, lng: 103.8198 }, // Singapore
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: -43.8688, lng: 151.2093 }, // Sydney
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: -23.5505, lng: -46.6333 }, // São Paulo, Brazil
+                },
+                {
+                  start: { lat: 6.5937, lng: 78.9629 }, // India
+                  end: { lat: -1.2921, lng: 36.8219 }, // Nairobi, Kenya
+                },
+              ]}
+              lineColor="#000000"
+            />
           </div>
         </div>
       </section>
@@ -253,15 +264,15 @@ export default function Page() {
 
         <div className="mt-8 space-y-2">
           <div className="w-full">
-            <RoleLink>Engineering Roles</RoleLink>
+            <RoleLink href="/roles?tab=engineering">Engineering Roles</RoleLink>
           </div>
 
           <div className="w-full">
-            <RoleLink>Other Roles</RoleLink>
+            <RoleLink href="/roles?tab=other">Other Roles</RoleLink>
           </div>
 
           <div className="w-full">
-            <RoleLink>Internships</RoleLink>
+            <RoleLink href="/roles?tab=internship">Internships</RoleLink>
           </div>
         </div>
       </section>
