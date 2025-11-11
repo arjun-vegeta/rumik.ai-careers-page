@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import ApplyForm from "@/components/ApplyForm"
 import Navbar from "@/components/Navbar"
 
+export const dynamic = 'force-dynamic'
+
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const job = await prisma.job.findUnique({

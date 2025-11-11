@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import AllCandidatesClient from "./AllCandidatesClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function CandidatesPage() {
   const [candidates, jobs] = await Promise.all([
     prisma.candidate.findMany({

@@ -4,8 +4,7 @@ import RolesClient from "./RolesClient"
 import { Suspense } from "react"
 import ToastHandler from "@/components/ToastHandler"
 
-// Enable static generation for faster page loads
-export const revalidate = 60 // Revalidate every 60 seconds
+export const dynamic = 'force-dynamic'
 
 export default async function RolesPage() {
   const allJobs = await prisma.job.findMany({

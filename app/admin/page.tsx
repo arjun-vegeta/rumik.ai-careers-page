@@ -4,6 +4,8 @@ import Link from "next/link"
 import AdminJobsClient from "./AdminJobsClient"
 import { Plus } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminJobsPage() {
   const jobs = await prisma.job.findMany({
     orderBy: { createdAt: 'desc' },

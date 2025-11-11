@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import JobForm from "@/components/JobForm"
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const job = await prisma.job.findUnique({

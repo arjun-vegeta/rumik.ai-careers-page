@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import CandidatesClient from "./CandidatesClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function JobCandidatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   

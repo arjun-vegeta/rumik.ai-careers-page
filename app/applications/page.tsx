@@ -4,6 +4,8 @@ import { redirect } from "next/navigation"
 import Navbar from "@/components/Navbar"
 import ApplicationsClient from "./ApplicationsClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ApplicationsPage() {
   const session = await auth()
 
