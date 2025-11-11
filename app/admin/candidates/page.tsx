@@ -49,9 +49,9 @@ export default async function CandidatesPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2">All Candidates</h1>
-        <p className="text-gray-600 text-lg">View and manage all job applications</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">All Candidates</h1>
+        <p className="text-gray-600 text-base md:text-lg">View and manage all job applications</p>
       </div>
 
       <AllCandidatesClient candidates={candidates} allJobs={jobs.map(j => j.title)} />

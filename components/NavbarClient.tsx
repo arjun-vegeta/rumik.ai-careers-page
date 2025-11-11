@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { useState, useRef, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface User {
   name?: string | null;
@@ -19,6 +20,7 @@ interface NavbarClientProps {
 
 export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -74,12 +76,12 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   };
 
   return (
-    <header className={`bg-[#FCFAF7] w-full sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+    <header className={`bg-[#FCFAF7] w-full sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} border-b border-gray-200`}>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 flex items-center justify-between">
         <Link 
         href="/" 
         onClick={handleLogoClick}
-        className="w-60 h-12 relative cursor-pointer block"
+        className="w-40 h-10 md:w-60 md:h-12 relative cursor-pointer block"
       >
         {isPending ? (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -135,7 +137,16 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
         </a>
       </nav>
 
-      <div className="flex items-center gap-4">
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="md:hidden p-2 text-black"
+        aria-label="Toggle menu"
+      >
+        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      <div className="hidden md:flex items-center gap-4">
         {isHydrated && user ? (
           <div className="relative" ref={dropdownRef}>
             <button
@@ -205,6 +216,124 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
           <div className="w-[120px] h-12" />
         )}
       </div>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden absolute top-full left-0 right-0 bg-[#FCFAF7] border-b border-gray-200 shadow-lg overflow-hidden"
+          >
+            <motion.nav
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+              exit={{ y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="flex flex-col px-4 py-4 space-y-4"
+            >
+              <Link 
+                className="text-lg font-medium hover:text-gray-600 transition-colors" 
+                href="/roles" 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Roles
+              </Link>
+              <Link 
+                className="text-lg font-medium hover:text-gray-600 transition-colors" 
+                href="/#benefits"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  const benefitsSection = document.getElementById('benefits');
+                  if (benefitsSection) {
+                    e.preventDefault();
+                    benefitsSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                Benefits
+              </Link>
+              <a 
+                className="text-lg font-medium hover:text-gray-600 transition-colors" 
+                href="https://rumik.ai/blogs" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Blogs
+              </a>
+              <a 
+                className="text-lg font-medium hover:text-gray-600 transition-colors" 
+                href="https://rumik.ai/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                About Us
+              </a>
+
+              <div className="pt-4 border-t border-gray-200">
+                {isHydrated && user ? (
+                  <div className="space-y-3">
+                    <div className="px-3 py-2 bg-gray-100 rounded-lg">
+                      <p className="text-xs text-gray-500">Signed in as</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
+                    </div>
+
+                    {user.role === "recruiter" && (
+                      <Link
+                        href="/admin"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
+
+                    {user.role !== "recruiter" && (
+                      <Link
+                        href="/applications"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        My Applications
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.removeItem("navbar_user");
+                          const currentPath = window.location.pathname;
+                          window.location.href = `/api/auth/signout?callbackUrl=${encodeURIComponent(currentPath)}`;
+                        }
+                      }}
+                      className="w-full text-left px-3 py-2 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : isHydrated ? (
+                  <a
+                    href="/auth/signin"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      if (typeof window !== 'undefined') {
+                        window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
+                      }
+                    }}
+                    className="inline-flex items-center justify-center gap-2 w-full rounded-full bg-black text-[#fce4bd] px-4 py-3 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
+                  >
+                    Login <ArrowRight size={18} />
+                  </a>
+                ) : null}
+              </div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
     </header>
   );

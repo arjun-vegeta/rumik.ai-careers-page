@@ -49,21 +49,21 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
   return (
     <div>
       {/* Search Bar */}
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6">
         <div className="relative max-w-2xl">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search jobs..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+            className="w-full pl-10 md:pl-12 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
           />
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-200">
+      <div className="flex gap-1 md:gap-2 mb-4 md:mb-6 border-b border-gray-200 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -71,7 +71,7 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
               setActiveTab(tab.id);
               setSearchQuery("");
             }}
-            className={`px-6 py-3 font-medium transition-colors relative cursor-pointer ${
+            className={`px-3 md:px-6 py-2 md:py-3 text-sm md:text-base font-medium transition-colors relative cursor-pointer whitespace-nowrap ${
               activeTab === tab.id
                 ? "text-black"
                 : "text-gray-500 hover:text-gray-700"
@@ -85,8 +85,8 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
         ))}
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -137,6 +137,42 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {filteredJobs.length === 0 ? (
+          <div className="bg-white rounded-lg shadow p-6 text-center text-gray-500">
+            No jobs found.
+          </div>
+        ) : (
+          filteredJobs.map((job) => (
+            <div key={job.id} className="bg-white rounded-lg shadow p-4">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-base font-semibold text-gray-900">{job.title}</h3>
+                <Badge 
+                  variant={job.isActive ? "default" : "secondary"} 
+                  className={`text-xs ${job.isActive ? "bg-green-100 text-green-800 border-green-200" : ""}`}
+                >
+                  {job.isActive ? "Active" : "Inactive"}
+                </Badge>
+              </div>
+              <div className="text-sm text-gray-600 mb-4">
+                <span className="font-medium">{job._count.candidates}</span> applicants
+              </div>
+              <div className="flex gap-2">
+                <Link href={`/admin/jobs/${job.id}/edit`} className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full">Edit</Button>
+                </Link>
+                <Link href={`/admin/jobs/${job.id}/candidates`} className="flex-1">
+                  <Button size="sm" className="w-full bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                    Applicants
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

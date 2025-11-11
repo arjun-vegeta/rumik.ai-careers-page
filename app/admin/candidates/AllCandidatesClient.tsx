@@ -112,19 +112,19 @@ export default function AllCandidatesClient({ candidates: initialCandidates, all
   return (
     <div>
       {/* Search Bar and Job Filter */}
-      <div className="mb-6 flex gap-4">
-        <div className="relative flex-1 max-w-2xl">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+      <div className="mb-4 md:mb-6 flex flex-col md:flex-row gap-3 md:gap-4">
+        <div className="relative flex-1 md:max-w-2xl">
+          <Search className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search by name, email, or job title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+            className="w-full pl-10 md:pl-12 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
           />
         </div>
         <Select value={selectedJob} onValueChange={setSelectedJob}>
-          <SelectTrigger className="w-[250px] border py-6 h-auto bg-white">
+          <SelectTrigger className="w-full md:w-[250px] border py-2.5 md:py-6 h-auto bg-white text-sm md:text-base">
             <SelectValue placeholder="Filter by job" />
           </SelectTrigger>
           <SelectContent>
@@ -138,9 +138,15 @@ export default function AllCandidatesClient({ candidates: initialCandidates, all
         </Select>
       </div>
 
+      {/* Mobile Notice */}
+      <div className="md:hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-blue-800">
+        <p className="font-medium mb-1">📱 Mobile View</p>
+        <p>For the best experience viewing candidate details and AI insights, please use a desktop or tablet device.</p>
+      </div>
+
       {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="w-full">
+      <div className="bg-white rounded-lg shadow overflow-x-auto">
+        <table className="w-full min-w-[800px]">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>

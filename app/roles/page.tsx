@@ -31,10 +31,10 @@ export default async function RolesPage() {
         <ToastHandler />
       </Suspense>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Open Roles</h1>
-          <p className="text-gray-600 text-lg">
+      <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">Open Roles</h1>
+          <p className="text-gray-600 text-base md:text-lg">
             Join our team and help us build the most human AI.
           </p>
         </div>

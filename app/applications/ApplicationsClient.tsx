@@ -63,19 +63,19 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
   return (
     <div>
       {/* Search Bar and Status Filter */}
-      <div className="mb-6 flex gap-4">
-        <div className="relative flex-1 max-w-2xl">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+      <div className="mb-4 md:mb-6 flex flex-col md:flex-row gap-3 md:gap-4">
+        <div className="relative flex-1 md:max-w-2xl">
+          <Search className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search by job title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+            className="w-full pl-10 md:pl-12 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[200px] border py-6 h-auto bg-white">
+          <SelectTrigger className="w-full md:w-[200px] border py-2.5 md:py-6 h-auto bg-white text-sm md:text-base">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -89,8 +89,8 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
         </Select>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -225,6 +225,112 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {filteredApplications.length === 0 ? (
+          <div className="bg-white rounded-lg shadow p-6 text-center">
+            <p className="text-gray-500 mb-4">
+              {applications.length === 0 
+                ? "You haven't applied to any jobs yet." 
+                : "No applications match your filters."}
+            </p>
+            {applications.length === 0 && (
+              <Link href="/roles">
+                <Button className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                  Browse Open Positions
+                </Button>
+              </Link>
+            )}
+          </div>
+        ) : (
+          filteredApplications.map((application) => {
+            const statusConfig = getStatusConfig(application.status);
+            const isExpanded = expandedId === application.id;
+            return (
+              <div key={application.id} className="bg-white rounded-lg shadow p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-base font-semibold text-gray-900 flex-1">{application.job.title}</h3>
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${statusConfig.className} ml-2`}>
+                    {statusConfig.label}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 mb-3">
+                  Applied: {new Date(application.createdAt).toLocaleDateString()}
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href={application.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1"
+                  >
+                    <Button variant="outline" size="sm" className="w-full text-xs">
+                      View Resume
+                    </Button>
+                  </a>
+                  {application.status === "submitted" && (
+                    <WithdrawButton applicationId={application.id} />
+                  )}
+                  <Button
+                    size="sm"
+                    onClick={() => toggleExpand(application.id)}
+                    className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black text-xs"
+                  >
+                    Details
+                    {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </Button>
+                </div>
+                {isExpanded && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
+                    <div>
+                      <h4 className="text-xs font-semibold text-gray-900 mb-1">Why You're a Good Fit</h4>
+                      <p className="text-xs text-gray-700 whitespace-pre-wrap">{application.whyFit}</p>
+                    </div>
+                    {(application.portfolio || application.linkedin || application.github) && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-900 mb-1">Links</h4>
+                        <div className="flex flex-wrap gap-3 text-xs">
+                          {application.portfolio && (
+                            <a
+                              href={application.portfolio}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              Portfolio ↗
+                            </a>
+                          )}
+                          {application.linkedin && (
+                            <a
+                              href={application.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              LinkedIn ↗
+                            </a>
+                          )}
+                          {application.github && (
+                            <a
+                              href={application.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              GitHub ↗
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

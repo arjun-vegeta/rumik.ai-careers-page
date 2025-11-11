@@ -23,32 +23,32 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
     <div className="min-h-screen bg-[#FCFAF7]">
       <Navbar />
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">{job.title}</h1>
-          <div className="flex flex-wrap gap-2 mb-6">
+      <main className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">{job.title}</h1>
+          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
             {job.skills.map((skill) => (
-              <Badge key={skill} variant="secondary">
+              <Badge key={skill} variant="secondary" className="text-xs md:text-sm">
                 {skill}
               </Badge>
             ))}
           </div>
         </div>
 
-        <div className="prose max-w-none mb-12">
-          <h2 className="text-2xl font-bold mb-4">Job Description</h2>
-          <p className="text-gray-700 whitespace-pre-wrap mb-6">{job.description}</p>
+        <div className="prose max-w-none mb-8 md:mb-12">
+          <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Job Description</h2>
+          <p className="text-sm md:text-base text-gray-700 whitespace-pre-wrap mb-4 md:mb-6">{job.description}</p>
           
           {job.details && (
             <>
-              <h2 className="text-2xl font-bold mb-4">Additional Details</h2>
-              <p className="text-gray-700 whitespace-pre-wrap">{job.details}</p>
+              <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Additional Details</h2>
+              <p className="text-sm md:text-base text-gray-700 whitespace-pre-wrap">{job.details}</p>
             </>
           )}
         </div>
 
-        <div className="border-t pt-12">
-          <h2 className="text-3xl font-bold mb-6">Apply for this position</h2>
+        <div className="border-t pt-8 md:pt-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Apply for this position</h2>
           <ApplyForm job={job} session={session} />
         </div>
       </main>
