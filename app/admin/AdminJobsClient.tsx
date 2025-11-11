@@ -110,7 +110,10 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
                     <div className="text-sm font-medium text-gray-900">{job.title}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <Badge variant={job.isActive ? "default" : "secondary"} className="text-xs">
+                    <Badge 
+                      variant={job.isActive ? "default" : "secondary"} 
+                      className={`text-xs ${job.isActive ? "bg-green-100 text-green-800 border-green-200" : ""}`}
+                    >
                       {job.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </td>

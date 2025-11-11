@@ -19,39 +19,34 @@ interface Candidate {
   resumeUrl: string;
   status: string;
   createdAt: Date;
+  job: {
+    title: string;
+  };
 }
 
-interface CandidatesClientProps {
+interface AllCandidatesClientProps {
   candidates: Candidate[];
+  allJobs: string[];
 }
 
-export default function CandidatesClient({ candidates: initialCandidates }: CandidatesClientProps) {
+export default function AllCandidatesClient({ candidates: initialCandidates, allJobs }: AllCandidatesClientProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedJob, setSelectedJob] = useState<string>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [candidates, setCandidates] = useState(initialCandidates);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
-  const filteredCandidates = candidates.filter((candidate) =>
-    searchQuery === "" ||
-    candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    candidate.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "submitted":
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Submitted</Badge>;
-      case "in_review":
-        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">In Review</Badge>;
-      case "selected":
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Selected</Badge>;
-      case "rejected":
-        return <Badge className="bg-red-100 text-red-800 border-red-200">Rejected</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
-    }
-  };
+  const filteredCandidates = candidates.filter((candidate) => {
+    const matchesSearch = searchQuery === "" ||
+      candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      candidate.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      candidate.job.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesJob = selectedJob === "all" || candidate.job.title === selectedJob;
+    
+    return matchesSearch && matchesJob;
+  });
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
@@ -68,7 +63,6 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
 
       if (!res.ok) throw new Error("Failed to update status");
 
-      // Update local state
       setCandidates(candidates.map(c => 
         c.id === candidateId ? { ...c, status: newStatus } : c
       ));
@@ -84,18 +78,31 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
 
   return (
     <div>
-      {/* Search Bar */}
-      <div className="mb-6">
-        <div className="relative max-w-2xl">
+      {/* Search Bar and Job Filter */}
+      <div className="mb-6 flex gap-4">
+        <div className="relative flex-1 max-w-2xl">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
             type="text"
-            placeholder="Search by name or email..."
+            placeholder="Search by name, email, or job title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent bg-white"
           />
         </div>
+        <Select value={selectedJob} onValueChange={setSelectedJob}>
+          <SelectTrigger className="w-[250px] border py-6 h-auto bg-white">
+            <SelectValue placeholder="Filter by job" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Jobs</SelectItem>
+            {allJobs.map((jobTitle) => (
+              <SelectItem key={jobTitle} value={jobTitle}>
+                {jobTitle}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Table */}
@@ -105,6 +112,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
             <tr>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Job Title</th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Submitted</th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Resume</th>
@@ -114,8 +122,8 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
           <tbody className="divide-y divide-gray-200">
             {filteredCandidates.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                  No applicants found.
+                <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                  {selectedJob !== "all" ? "No applicants yet for this job." : "No applicants found."}
                 </td>
               </tr>
             ) : (
@@ -127,6 +135,9 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-600">{candidate.email}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900">{candidate.job.title}</div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-600">
@@ -192,7 +203,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                   </tr>
                   {expandedId === candidate.id && (
                     <tr>
-                      <td colSpan={6} className="px-6 py-6 bg-gray-50">
+                      <td colSpan={7} className="px-6 py-6 bg-gray-50">
                         <div className="space-y-4">
                           <div>
                             <h4 className="text-sm font-semibold text-gray-900 mb-2">Contact Information</h4>
