@@ -32,7 +32,7 @@ export default async function SignInPage({
           >
             <Button 
               type="submit"
-              className="w-full bg-black text-[#FFF4B3] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-5 md:py-6 text-sm md:text-base"
+              className="w-full bg-black text-[#FFF4B3] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-5 md:py-6 text-sm md:text-base"
             >
               <Image src="/google.svg" alt="Google" width={20} height={20} />
               Sign in with Google

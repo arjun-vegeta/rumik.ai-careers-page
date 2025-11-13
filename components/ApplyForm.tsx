@@ -57,7 +57,7 @@ export default function ApplyForm({ job, session }: ApplyFormProps) {
         <div className="flex justify-center">
           <Button 
             onClick={() => signIn("google")}
-            className="bg-black text-[#FFF4B3] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-5 md:py-6 text-sm md:text-base"
+            className="bg-black text-[#FFF4B3] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-5 md:py-6 text-sm md:text-base"
           >
             <Image src="/google.svg" alt="Google" width={20} height={20} />
             Sign in with Google
@@ -163,7 +163,7 @@ export default function ApplyForm({ job, session }: ApplyFormProps) {
       <Button 
         type="submit" 
         disabled={loading}
-        className="bg-black py-5 md:py-6 text-sm md:text-base text-[#fce4bd] hover:bg-gray-800 w-full"
+        className="bg-black py-5 md:py-6 text-sm md:text-base text-[#E5E0CD] hover:bg-gray-800 w-full"
       >
         {loading ? "Submitting..." : "Submit Application"}
       </Button>

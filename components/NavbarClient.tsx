@@ -65,7 +65,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     startTransition(() => {
-      router.push("/");
+      router.push("/careers");
     });
   };
 
@@ -76,10 +76,10 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   };
 
   return (
-    <header className={`bg-[#FCFAF7] w-full sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} border-b border-gray-200`}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 flex items-center justify-between">
+    <header className={`bg-[#FCFAF7] w-full sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} border-b md:border-b-0 border-gray-200`}>
+      <div className="max-w-full mx-auto px-4 md:px-12 py-4 md:py-6 flex items-center justify-between">
         <Link 
-        href="/" 
+        href="/careers" 
         onClick={handleLogoClick}
         className="w-40 h-10 md:w-60 md:h-12 relative cursor-pointer block"
       >
@@ -100,26 +100,15 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
       </Link>
 
       <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
-        <Link className="relative group cursor-pointer" href="/roles" prefetch={true}>
+        <Link className="relative group cursor-pointer" href="/" prefetch={true}>
           <span className="relative">
-            Roles
+            Home
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
           </span>
         </Link>
-        <Link 
-          className="relative group cursor-pointer" 
-          href="/#benefits"
-          onClick={(e) => {
-            const benefitsSection = document.getElementById('benefits');
-            if (benefitsSection) {
-              e.preventDefault();
-              benefitsSection.scrollIntoView({ behavior: 'smooth' });
-            }
-            // If not on homepage, let the Link navigate normally
-          }}
-        >
+        <Link className="relative group cursor-pointer" href="/roles" prefetch={true}>
           <span className="relative">
-            Benefits
+            Roles
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
           </span>
         </Link>
@@ -129,9 +118,9 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
           </span>
         </a>
-        <a className="relative group cursor-pointer" href="https://rumik.ai/" target="_blank" rel="noopener noreferrer">
+        <a className="relative group cursor-pointer" href="https://rumik.ai/API" target="_blank" rel="noopener noreferrer">
           <span className="relative">
-            About Us
+            API
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
           </span>
         </a>
@@ -151,7 +140,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-4 py-2 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
+              className="inline-flex items-center gap-2 rounded-full bg-black text-[#E5E0CD] px-4 py-2 text-base font-semibold shadow hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
             >
               {getUserDisplayName()}
               <ChevronDown size={18} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
@@ -206,7 +195,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
                 window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
               }
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-4 py-2 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
+            className="inline-flex items-center gap-2 rounded-full bg-black text-[#E5E0CD] px-4 py-2 text-base font-semibold shadow hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
             aria-label="Login"
           >
             Login <ArrowRight size={18} />
@@ -236,24 +225,17 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
             >
               <Link 
                 className="text-lg font-medium hover:text-gray-600 transition-colors" 
+                href="/" 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link 
+                className="text-lg font-medium hover:text-gray-600 transition-colors" 
                 href="/roles" 
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Roles
-              </Link>
-              <Link 
-                className="text-lg font-medium hover:text-gray-600 transition-colors" 
-                href="/#benefits"
-                onClick={(e) => {
-                  setMobileMenuOpen(false);
-                  const benefitsSection = document.getElementById('benefits');
-                  if (benefitsSection) {
-                    e.preventDefault();
-                    benefitsSection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-              >
-                Benefits
               </Link>
               <a 
                 className="text-lg font-medium hover:text-gray-600 transition-colors" 
@@ -265,11 +247,11 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
               </a>
               <a 
                 className="text-lg font-medium hover:text-gray-600 transition-colors" 
-                href="https://rumik.ai/" 
+                href="https://rumik.ai/API" 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                About Us
+                API
               </a>
 
               <div className="pt-4 border-t border-gray-200">
@@ -324,7 +306,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
                         window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
                       }
                     }}
-                    className="inline-flex items-center justify-center gap-2 w-full rounded-full bg-black text-[#fce4bd] px-4 py-3 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
+                    className="inline-flex items-center justify-center gap-2 w-full rounded-full bg-black text-[#E5E0CD] px-4 py-3 text-base font-semibold shadow hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
                   >
                     Login <ArrowRight size={18} />
                   </a>

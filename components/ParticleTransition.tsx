@@ -22,9 +22,9 @@ export function ParticleTransition({ onComplete }: { onComplete: () => void }) {
 
     // Generate particles with many waypoints for smooth continuous movement
     const newParticles: Particle[] = [];
-    for (let i = 0; i < 300; i++) {
+    for (let i = 0; i < 360; i++) {
       const path = [];
-      const shouldConverge = i < 150; // 75% converge to top-left, 25% stay floating
+      const shouldConverge = i < 250; // 75% converge to top-left, 25% stay floating
       
       // Starting position
       const startX = Math.random() * width;
@@ -49,30 +49,52 @@ export function ParticleTransition({ onComplete }: { onComplete: () => void }) {
       }
       
       if (shouldConverge) {
-        // Gradual convergence to top-left with random movement (2.2s - 3s)
-        for (let j = 0; j < 8; j++) {
-          const progress = (j + 1) / 9;
-          
-          // Add random movement while converging
-          const randomX = (Math.random() - 0.5) * width * 0.1 * (1 - progress);
-          const randomY = (Math.random() - 0.5) * height * 0.1 * (1 - progress);
-          
-          // Gradually move towards 0,0 with random offsets
-          currentX = currentX * (1 - progress * 0.3) + randomX;
-          currentY = currentY * (1 - progress * 0.3) + randomY;
-          
-          // Ensure we stay within bounds
-          currentX = Math.max(0, currentX);
-          currentY = Math.max(0, currentY);
-          
-          path.push({
-            x: currentX,
-            y: currentY,
-          });
+        // Define target position within message bounds
+        const messageWidth = 250;
+        const messageHeight = 50;
+        const targetX = Math.random() * messageWidth;
+        const targetY = Math.random() * messageHeight;
+        
+        // Create varied curved paths to the target position
+        const pathType = Math.random();
+        const numConvergePoints = 15; // More points for smoother movement
+        
+        if (pathType < 0.33) {
+          // Curved path through top-right
+          for (let j = 0; j < numConvergePoints; j++) {
+            const progress = (j + 1) / (numConvergePoints + 1);
+            // Interpolate toward target with curve
+            const curveX = currentX + (width * 0.3 - currentX) * Math.sin(progress * Math.PI / 2);
+            const curveY = currentY * (1 - progress * 0.7);
+            currentX = curveX * (1 - progress) + targetX * progress;
+            currentY = curveY * (1 - progress) + targetY * progress;
+            path.push({ x: currentX, y: currentY });
+          }
+        } else if (pathType < 0.66) {
+          // Curved path through left side
+          for (let j = 0; j < numConvergePoints; j++) {
+            const progress = (j + 1) / (numConvergePoints + 1);
+            const curveX = currentX * (1 - progress * 0.7);
+            const curveY = currentY + (height * 0.2 - currentY) * Math.sin(progress * Math.PI / 2) * (1 - progress);
+            currentX = curveX * (1 - progress) + targetX * progress;
+            currentY = curveY * (1 - progress) + targetY * progress;
+            path.push({ x: currentX, y: currentY });
+          }
+        } else {
+          // Smooth curved path with random variations
+          for (let j = 0; j < numConvergePoints; j++) {
+            const progress = (j + 1) / (numConvergePoints + 1);
+            // Gradually move toward target with some curve
+            const randomOffsetX = (Math.random() - 0.5) * width * 0.05 * (1 - progress);
+            const randomOffsetY = (Math.random() - 0.5) * height * 0.05 * (1 - progress);
+            currentX = currentX * (1 - progress) + targetX * progress + randomOffsetX;
+            currentY = currentY * (1 - progress) + targetY * progress + randomOffsetY;
+            path.push({ x: currentX, y: currentY });
+          }
         }
         
-        // Final position at top-left
-        path.push({ x: 0, y: 0 });
+        // Final position at target
+        path.push({ x: targetX, y: targetY });
       } else {
         // Continue floating randomly (2.2s - 3s)
         for (let j = 0; j < 8; j++) {

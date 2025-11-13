@@ -43,7 +43,7 @@ export default function AIInsightButton({ candidateId, jobId }: AIInsightButtonP
       <Button 
         onClick={handleGenerateInsight}
         disabled={loading}
-        className="bg-black text-[#FFF4B3] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
+        className="bg-black text-[#FFF4B3] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
       >
         {loading ? "Generating..." : "Generate AI Insight"}
       </Button>

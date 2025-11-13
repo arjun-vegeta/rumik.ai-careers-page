@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -29,14 +29,15 @@ export default function HomeNavbar() {
   }, [lastScrollY]);
 
   return (
-    <header className={`bg-[#FCFAF7]/80 backdrop-blur-md w-full fixed top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} border-b border-gray-200`}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 flex items-center justify-between">
+    <header className={`bg-[#FCFAF7] backdrop-blur-md w-full fixed top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} border-b md:border-b-0 border-gray-200`}>
+      <div className="max-full mx-auto px-4 md:px-12 py-4 md:py-6 flex items-center justify-between">
+        {/* Logo */}
         <Link 
           href="/" 
           className="w-40 h-10 md:w-48 md:h-12 relative cursor-pointer block"
         >
           <Image 
-            src="/careers_logo.webp" 
+            src="/homelogo.avif" 
             alt="rumik.ai" 
             fill 
             style={{ objectFit: "contain" }} 
@@ -45,16 +46,11 @@ export default function HomeNavbar() {
           />
         </Link>
 
-        <nav className="hidden md:flex gap-8 text-lg font-medium">
+        {/* Centered Navigation */}
+        <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
           <Link className="relative group cursor-pointer" href="/">
             <span className="relative">
               Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
-            </span>
-          </Link>
-          <Link className="relative group cursor-pointer" href="/careers">
-            <span className="relative">
-              Careers
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
             </span>
           </Link>
@@ -64,13 +60,29 @@ export default function HomeNavbar() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
             </span>
           </a>
-          <a className="relative group cursor-pointer" href="https://rumik.ai/api" target="_blank" rel="noopener noreferrer">
+          <a className="relative group cursor-pointer" href="https://rumik.ai/API" target="_blank" rel="noopener noreferrer">
             <span className="relative">
               API
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
             </span>
           </a>
+                    <Link className="relative group cursor-pointer" href="/careers">
+            <span className="relative">
+              Careers
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full origin-left"></span>
+            </span>
+          </Link>
         </nav>
+
+        {/* Talk to Ira Button - Desktop */}
+        <a
+          href="https://ira.rumik.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden md:inline-flex items-center gap-2 text-base bg-black text-[#E5E0CD] px-6 py-2.5 rounded-full font-medium shadow-lg hover:bg-[#E5E0CD] hover:text-black transition-all duration-300 border-2 border-black"
+        >
+          Talk to Ira <ArrowUpRight size={18} />
+        </a>
 
         {/* Mobile menu button */}
         <button
@@ -90,7 +102,7 @@ export default function HomeNavbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden absolute top-full left-0 right-0 bg-[#FCFAF7]/95 backdrop-blur-md border-b border-gray-200 shadow-lg overflow-hidden"
+            className="md:hidden absolute top-full left-0 right-0 bg-[#FCFAF7] backdrop-blur-md border-b border-gray-200 shadow-lg overflow-hidden"
           >
             <motion.nav
               initial={{ y: -20 }}
@@ -128,6 +140,16 @@ export default function HomeNavbar() {
                 rel="noopener noreferrer"
               >
                 API
+              </a>
+              
+              {/* Talk to Ira Button - Mobile */}
+              <a
+                href="https://ira.rumik.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 text-base bg-black text-[#E5E0CD] px-6 py-3 rounded-full font-medium shadow-lg hover:bg-[#E5E0CD] hover:text-black transition-all duration-300 border-2 border-black mt-2"
+              >
+                Talk to Ira <ArrowUpRight size={18} />
               </a>
             </motion.nav>
           </motion.div>

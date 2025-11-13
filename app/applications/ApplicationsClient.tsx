@@ -112,7 +112,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
                   </p>
                   {applications.length === 0 && (
                     <Link href="/roles">
-                      <Button className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                      <Button className="bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
                         Browse Open Positions
                       </Button>
                     </Link>
@@ -157,7 +157,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
                           <Button
                             size="sm"
                             onClick={() => toggleExpand(application.id)}
-                            className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
+                            className="flex items-center gap-1 bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
                           >
                             Details
                             {expandedId === application.id ? (
@@ -238,7 +238,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
             </p>
             {applications.length === 0 && (
               <Link href="/roles">
-                <Button className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                <Button className="bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
                   Browse Open Positions
                 </Button>
               </Link>
@@ -276,7 +276,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
                   <Button
                     size="sm"
                     onClick={() => toggleExpand(application.id)}
-                    className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black text-xs"
+                    className="flex items-center gap-1 bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black text-xs"
                   >
                     Details
                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}

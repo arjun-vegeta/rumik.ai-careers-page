@@ -126,7 +126,7 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
                         <Button variant="outline" size="sm">Edit</Button>
                       </Link>
                       <Link href={`/admin/jobs/${job.id}/candidates`}>
-                        <Button size="sm" className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                        <Button size="sm" className="bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
                           View Applicants
                         </Button>
                       </Link>
@@ -165,7 +165,7 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
                   <Button variant="outline" size="sm" className="w-full">Edit</Button>
                 </Link>
                 <Link href={`/admin/jobs/${job.id}/candidates`} className="flex-1">
-                  <Button size="sm" className="w-full bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
+                  <Button size="sm" className="w-full bg-black text-[#E5E0CD] hover:bg-[#E5E0CD] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black">
                     Applicants
                   </Button>
                 </Link>
