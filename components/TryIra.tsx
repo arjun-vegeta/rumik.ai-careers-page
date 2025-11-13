@@ -186,7 +186,7 @@ export default function TryIra() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:border-black transition-colors text-sm"
+              className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:border-black transition-colors text-base"
               disabled={isLoading}
             />
             <button
