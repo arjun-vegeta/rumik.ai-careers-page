@@ -3,6 +3,7 @@ import AllCandidatesClient from "./AllCandidatesClient"
 
 export const dynamic = 'force-dynamic'
 
+// Shows all candidates across all job postings (excluding withdrawn applications)
 export default async function CandidatesPage() {
   const [candidates, jobs] = await Promise.all([
     prisma.candidate.findMany({

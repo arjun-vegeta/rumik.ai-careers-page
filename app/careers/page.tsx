@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Come build the most Human AI. Explore career opportunities and join our team.",
 };
 
+// Main careers landing page with job listings
 export default function CareersPage() {
   return (
     <main className="bg-[#FCFAF7] text-black min-h-screen">

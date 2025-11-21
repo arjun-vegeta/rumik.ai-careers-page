@@ -9,6 +9,7 @@ interface AIInsightButtonProps {
   jobId: string
 }
 
+// Triggers AI-powered candidate insights generation
 export default function AIInsightButton({ candidateId, jobId }: AIInsightButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)

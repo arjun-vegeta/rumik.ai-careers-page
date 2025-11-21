@@ -6,6 +6,7 @@ import ToastHandler from "@/components/ToastHandler"
 
 export const dynamic = 'force-dynamic'
 
+// Public page displaying all active job openings
 export default async function RolesPage() {
   const allJobs = await prisma.job.findMany({
     where: { isActive: true },

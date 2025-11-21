@@ -5,12 +5,11 @@ import React, { useState } from "react";
 import BenefitLine from "@/components/BenefitLine";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 
+// Custom cursor that follows mouse movement with an arrow icon
 function HoverCursor() {
-  // simple component to render a custom circle cursor with an arrow SVG
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ x: -100, y: -100 });
 
-  // attach mousemove on document when visible
   React.useEffect(() => {
     if (!visible) return;
     const move = (e: MouseEvent) => {
@@ -22,7 +21,6 @@ function HoverCursor() {
 
   return (
     <>
-      {/* global state toggles via custom events from RoleLink components */}
       <div
         id="custom-cursor"
         style={{
@@ -57,7 +55,7 @@ function HoverCursor() {
   );
 }
 
-// tiny helper to receive custom show/hide events
+// Listens for custom events to show or hide the cursor
 function CursorVisibilityController({ onChange }: { onChange: (v: boolean) => void }) {
   React.useEffect(() => {
     const show = () => onChange(true);
@@ -72,10 +70,9 @@ function CursorVisibilityController({ onChange }: { onChange: (v: boolean) => vo
   return null;
 }
 
+// Interactive link that triggers the custom cursor on hover
 function RoleLink({ children, href }: { children: React.ReactNode; href: string }) {
-  // Role link that triggers custom cursor and hides the OS cursor while hovered
   const onMouseEnter = (e: React.MouseEvent) => {
-    // hide native cursor for the hovered element via style
     const target = e.currentTarget as HTMLElement;
     target.style.cursor = "none";
     window.dispatchEvent(new CustomEvent("rumik-cursor-show"));
@@ -98,7 +95,7 @@ function RoleLink({ children, href }: { children: React.ReactNode; href: string 
 }
 
 export default function HomePage() {
-  // Handle hash navigation on page load
+  // Scroll to benefits section if hash is present in URL
   React.useEffect(() => {
     const hash = window.location.hash;
     if (hash === '#benefits') {
@@ -115,7 +112,7 @@ export default function HomePage() {
     <>
       <HoverCursor />
 
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="relative max-w-7xl mx-auto px-6 pt-12 pb-16 md:pb-24 flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-1/2 pt-0 md:pt-12">
           <h1 className="text-[48px] sm:text-[48px] md:text-[50px] lg:text-[56px] xl:text-[66px] leading-[1.3] font-[400] max-w-xl">
@@ -135,7 +132,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* world map on the right */}
         <div className="w-full md:w-1/2 flex items-center justify-center">
           <Image 
             src="/map.webp" 
@@ -148,7 +144,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Second section (centered heading + left copy + right stats) */}
+      {/* About Section */}
       <section className="max-w-7xl mx-auto px-6 md:py-24 py-12">
         <div className="text-center">
           <h2 className="text-[28px] md:text-[34px] font-[400] leading-tight">
@@ -159,7 +155,6 @@ export default function HomePage() {
         </div>
 
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-          {/* Left column (below heading) */}
           <div>
             <div className="text-left">
               <p className="text-lg leading-7">
@@ -177,11 +172,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right column: stats */}
           <div className="space-y-12">
-            {/* Single line above both stats */}
-            
-            {/* Two stats side by side with gap */}
             <div className="grid grid-cols-2 gap-12 items-start">
               <div className="border-t border-black/10 pt-4">
                 <p className="text-2xl md:text-3xl font-[700]">1.5m+ users</p>
@@ -194,7 +185,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* below them: full width stat */}
             <div className="border-t border-black/10 pt-4">
               <p className="text-2xl md:text-3xl font-[700]">4 years runway to run 100 experiments</p>
               <p className="text-lg text-gray-500">shipping the 10 that work.</p>
@@ -203,7 +193,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Benefits big centered list (each line single, bigger) */}
+      {/* Benefits Section */}
       <section id="benefits" className="max-w-7xl mx-auto px-6 text-center md:py-24 py-12">
         <p className="text-[28px] md:text-[34px] text-black ">benfits: <span className="text-gray-500">we solved the actual problem.</span></p>
 
@@ -226,7 +216,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Select your fit - full width max-7xl, left aligned, larger */}
+      {/* Roles Section */}
       <section id="roles" className="max-w-7xl mx-auto px-6 md:py-24 py-12">
         <p className=" text-center text-[28px] md:text-[34px] text-black">select <span className="text-gray-500">your fit</span></p>
 

@@ -11,6 +11,7 @@ interface Message {
   id: string;
 }
 
+// Interactive chat interface to try talking with Ira AI
 export default function TryIra() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -31,15 +32,14 @@ export default function TryIra() {
     scrollToBottom();
   }, [messages]);
 
+  // Sends user message to Ira and displays response
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // Count user messages
     const userMessageCount = messages.filter(m => m.role === "user").length;
     
-    // Check if limit reached
     if (userMessageCount >= 6) {
-      return; // Prevent sending more messages
+      return;
     }
 
     const userMessage: Message = {

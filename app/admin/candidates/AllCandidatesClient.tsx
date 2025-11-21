@@ -35,6 +35,7 @@ interface AllCandidatesClientProps {
   allJobs: string[];
 }
 
+// Client component for managing all candidates with filtering and AI insights
 export default function AllCandidatesClient({ candidates: initialCandidates, allJobs }: AllCandidatesClientProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,10 +56,12 @@ export default function AllCandidatesClient({ candidates: initialCandidates, all
     return matchesSearch && matchesJob;
   });
 
+  // Toggle expanded details view for a candidate
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  // Updates candidate status and syncs with backend
   const handleStatusChange = async (candidateId: string, newStatus: string) => {
     setUpdatingStatus(candidateId);
     try {
@@ -83,6 +86,7 @@ export default function AllCandidatesClient({ candidates: initialCandidates, all
     }
   };
 
+  // Triggers AI analysis to generate candidate match score and insights
   const generateAIInsights = async (candidateId: string) => {
     setGeneratingInsights(candidateId);
     try {
@@ -317,7 +321,7 @@ export default function AllCandidatesClient({ candidates: initialCandidates, all
                                   <div className="text-xs font-semibold text-gray-700 uppercase">Key Insights</div>
                                   {candidate.aiInsights[0].insights.map((insight, idx) => (
                                     <div key={idx} className="flex gap-3">
-                                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-black text-[#E5E0CD] text-xs font-bold flex items-center justify-center mt-0.5">
+                                      <span className="shrink-0 w-6 h-6 rounded-full bg-black text-[#E5E0CD] text-xs font-bold flex items-center justify-center mt-0.5">
                                         {idx + 1}
                                       </span>
                                       <span className="text-sm text-gray-700 leading-relaxed">{insight}</span>

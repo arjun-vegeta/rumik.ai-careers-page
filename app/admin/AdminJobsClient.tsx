@@ -20,6 +20,7 @@ interface AdminJobsClientProps {
   jobs: Job[];
 }
 
+// Client component for filtering and managing job postings
 export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,6 +40,7 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
     return matchesTab && matchesSearch;
   });
 
+  // Updates search query and switches to 'all' tab when searching
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query !== "") {

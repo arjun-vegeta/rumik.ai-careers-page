@@ -18,6 +18,7 @@ interface NavbarClientProps {
   isHydrated: boolean;
 }
 
+// Client-side navigation bar with authentication and hide-on-scroll
 export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -62,6 +63,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  // Navigate to careers page with loading state
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     startTransition(() => {
@@ -69,6 +71,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
     });
   };
 
+  // Extracts display name from user data
   const getUserDisplayName = () => {
     if (user?.name) return user.name;
     if (user?.email) return user.email.split("@")[0];

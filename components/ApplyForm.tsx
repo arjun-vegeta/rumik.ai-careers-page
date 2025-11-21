@@ -18,6 +18,7 @@ interface ApplyFormProps {
   session: any
 }
 
+// Job application form with resume upload and authentication
 export default function ApplyForm({ job, session }: ApplyFormProps) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)

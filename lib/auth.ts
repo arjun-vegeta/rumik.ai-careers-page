@@ -2,6 +2,10 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import { prisma } from "./prisma"
 
+// ============================================
+// Authentication Configuration
+// ============================================
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
@@ -11,6 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    // Handles user creation and role assignment during Google sign-in
     async signIn({ user, account }) {
       if (account?.provider === "google" && user.email) {
         const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || []
@@ -32,8 +37,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true
     },
+    
+    // Enriches JWT token with user data from database
     async jwt({ token, user, account, trigger }) {
-      // On sign in or update, fetch fresh user data
       if ((account?.provider === "google" && user?.email) || trigger === "update") {
         const email = user?.email || token.email
         if (email) {
@@ -50,6 +56,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token
     },
+    
+    // Attaches user ID and role to the session object
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
@@ -57,8 +65,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session
     },
+    
+    // Manages post-authentication redirects
     async redirect({ url, baseUrl }) {
-      // After sign in, redirect to home page
       if (url.startsWith(baseUrl)) return url
       if (url.startsWith("/")) return `${baseUrl}${url}`
       return baseUrl

@@ -1,5 +1,7 @@
 import { prisma } from "../lib/prisma";
 
+// Utility script to remove all AI-generated insights from the database
+// Useful for testing or when you want to regenerate all insights from scratch
 async function clearAIInsights() {
   try {
     const result = await prisma.aIInsight.deleteMany({});

@@ -20,6 +20,7 @@ interface JobFormProps {
   }
 }
 
+// Form for creating and editing job postings
 export default function JobForm({ job }: JobFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -28,6 +29,7 @@ export default function JobForm({ job }: JobFormProps) {
   const [skillInput, setSkillInput] = useState("")
   const [jobType, setJobType] = useState(job?.jobType || "engineering")
 
+  // Submits job data to the API and handles navigation
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -66,6 +68,7 @@ export default function JobForm({ job }: JobFormProps) {
     }
   }
 
+  // Adds a new skill to the list if it's unique
   const addSkill = () => {
     if (skillInput.trim() && !skills.includes(skillInput.trim())) {
       setSkills([...skills, skillInput.trim()])

@@ -17,6 +17,7 @@ interface WithdrawButtonProps {
   applicationId: string
 }
 
+// Button to withdraw a job application with confirmation dialog
 export default function WithdrawButton({ applicationId }: WithdrawButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)

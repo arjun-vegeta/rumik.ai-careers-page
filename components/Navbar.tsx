@@ -9,21 +9,18 @@ interface User {
   role?: string | null;
 }
 
-// Cache session data globally to prevent refetch on every navigation
+// Server-rendered wrapper that fetches and caches user session
 let globalUserCache: User | null = null;
 let isFetching = false;
 
 export default function Navbar() {
-  // Always start with null to match SSR
   const [user, setUser] = useState<User | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    // Batch all state updates in a microtask to avoid cascading renders
     Promise.resolve().then(() => {
       setIsHydrated(true);
       
-      // Load from cache
       if (globalUserCache) {
         setUser(globalUserCache);
         return;
@@ -38,7 +35,6 @@ export default function Navbar() {
           return;
         }
       } catch {
-        // Invalid cache
       }
       
       // If already fetching, skip
@@ -46,7 +42,6 @@ export default function Navbar() {
       
       isFetching = true;
 
-      // Fetch session data
       fetch("/api/auth/session", {
         cache: "no-store",
       })
@@ -56,7 +51,6 @@ export default function Navbar() {
           setUser(userData);
           globalUserCache = userData;
           
-          // Update sessionStorage cache
           if (userData) {
             sessionStorage.setItem("navbar_user", JSON.stringify(userData));
           } else {
@@ -74,6 +68,5 @@ export default function Navbar() {
     });
   }, []);
 
-  // Pass both user and hydration state to prevent hydration mismatch
   return <NavbarClient user={user} isHydrated={isHydrated} />;
 }

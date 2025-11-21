@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import NavigationProgress from "@/components/NavigationProgress";
 import "./globals.css";
 
+// Configure Manrope as the primary font with multiple weights
 const manrope = Manrope({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],

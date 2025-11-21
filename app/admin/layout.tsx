@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import AdminLayoutClient from "./AdminLayoutClient"
 
+// Protects admin routes and ensures only recruiters can access
 export default async function AdminLayout({
   children,
 }: {

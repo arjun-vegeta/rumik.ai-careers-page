@@ -9,6 +9,7 @@ interface BenefitLineProps {
   image: string
 }
 
+// Animated benefit display with expanding image reveal on scroll
 export default function BenefitLine({ text, highlightText, image }: BenefitLineProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [showImage, setShowImage] = useState(false)
@@ -17,21 +18,16 @@ export default function BenefitLine({ text, highlightText, image }: BenefitLineP
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Trigger when 30% or more of the element is visible
         if (entry.isIntersecting) {
           setIsVisible(true)
-          // Show image 500ms into the 1000ms animation
           setTimeout(() => setShowImage(true), 500)
           
-          // Once visible, we can stop observing
           if (ref.current) {
             observer.unobserve(ref.current)
           }
         }
       },
       { 
-        // Changed threshold to 0.3 (30%)
-        // `1` was too strict and might not fire reliably
         threshold: 0.3,
         rootMargin: "0px"
       }
@@ -47,11 +43,10 @@ export default function BenefitLine({ text, highlightText, image }: BenefitLineP
         observer.unobserve(currentRef)
       }
     }
-  }, []) // Empty dependency array ensures this runs only once on mount
+  }, [])
 
   return (
     <div ref={ref} className="w-full">
-      {/* Mobile view: bullet point, left-aligned, can wrap */}
       <div className="md:hidden text-left px-0 flex">
         <span className="font-[700] mr-2" style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}>•</span>
         <p className="font-[700] flex-1" style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}>
@@ -59,13 +54,11 @@ export default function BenefitLine({ text, highlightText, image }: BenefitLineP
         </p>
       </div>
       
-      {/* Desktop view: animated line with square */}
       <div className="hidden md:flex items-center justify-center">
         <p className="font-[700] whitespace-nowrap" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)" }}>
           {text}
         </p>
         
-        {/* Square animation - only on desktop */}
         <div 
           className="relative inline-block overflow-hidden"
           style={{

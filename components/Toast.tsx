@@ -9,14 +9,13 @@ interface ToastProps {
   onClose: () => void;
 }
 
+// Displays temporary notification messages with auto-dismiss
 export default function Toast({ message, type = "success", onClose }: ToastProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Slide in
     setTimeout(() => setIsVisible(true), 10);
 
-    // Auto close after 3 seconds
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(onClose, 300); // Wait for slide out animation

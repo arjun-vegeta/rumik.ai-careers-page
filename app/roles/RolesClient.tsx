@@ -19,6 +19,7 @@ interface RolesClientProps {
   jobs: Job[];
 }
 
+// Client component for browsing and searching available positions
 export default function RolesClient({ jobs }: RolesClientProps) {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
@@ -47,6 +48,7 @@ export default function RolesClient({ jobs }: RolesClientProps) {
     return matchesTab && matchesSearch;
   });
 
+  // Switches to 'all' tab when user starts searching
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query !== "") {

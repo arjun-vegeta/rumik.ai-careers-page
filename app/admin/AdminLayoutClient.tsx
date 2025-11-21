@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
+// Admin dashboard layout with navigation tabs for jobs and candidates
 export default function AdminLayoutClient({
   children,
 }: {

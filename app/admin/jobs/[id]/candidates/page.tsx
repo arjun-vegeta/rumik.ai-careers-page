@@ -6,6 +6,7 @@ import CandidatesClient from "./CandidatesClient"
 
 export const dynamic = 'force-dynamic'
 
+// Shows all candidates who applied for a specific job
 export default async function JobCandidatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   

@@ -1,5 +1,6 @@
 import JobForm from "@/components/JobForm"
 
+// Create a new job posting
 export default function NewJobPage() {
   return (
     <div>

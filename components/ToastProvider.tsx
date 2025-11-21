@@ -9,6 +9,7 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
+// Provides toast notification functionality throughout the app
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 

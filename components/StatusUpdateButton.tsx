@@ -16,6 +16,7 @@ interface StatusUpdateButtonProps {
   currentStatus: string
 }
 
+// Dropdown to update candidate application status
 export default function StatusUpdateButton({ candidateId, currentStatus }: StatusUpdateButtonProps) {
   const router = useRouter()
   const [status, setStatus] = useState(currentStatus)
@@ -39,12 +40,13 @@ export default function StatusUpdateButton({ candidateId, currentStatus }: Statu
       router.refresh()
     } catch (err) {
       console.error(err)
-      setStatus(currentStatus) // Revert on error
+      setStatus(currentStatus)
     } finally {
       setLoading(false)
     }
   }
 
+  // Returns color class based on status value
   const getStatusColor = (s: string) => {
     switch (s) {
       case "submitted":

@@ -9,6 +9,7 @@ import StatusUpdateButton from "@/components/StatusUpdateButton"
 
 export const dynamic = 'force-dynamic'
 
+// Detailed view of a single candidate with AI insights
 export default async function CandidateDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const candidate = await prisma.candidate.findUnique({

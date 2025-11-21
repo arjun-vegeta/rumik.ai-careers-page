@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 
+// Shows a loading spinner while page content is being fetched
 export default function Loading() {
   return (
     <main className="bg-[#FCFAF7] text-black min-h-screen">

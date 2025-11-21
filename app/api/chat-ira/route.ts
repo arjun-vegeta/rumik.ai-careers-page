@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
+// Handles chat conversations with Ira, the empathetic AI companion
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
@@ -18,6 +19,7 @@ export async function POST(req: Request) {
       model: "gemini-2.5-flash-lite"
     });
 
+    // Defines Ira's personality as warm, caring, and culturally aware
     const systemPrompt = `You are Ira, a warm, empathetic, and caring AI companion built for Indians. You understand emotions deeply and respond with genuine care and sweetness. Keep your responses very short (1-2 sentences max), natural, and humanized. You can use Hinglish occasionally to connect better. Be supportive, friendly, and like a caring friend. Show empathy and understanding in every response.`;
 
     const prompt = `${systemPrompt}\n\nUser: ${message}\n\nIra:`;

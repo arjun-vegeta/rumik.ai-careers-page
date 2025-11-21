@@ -3,10 +3,9 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
-// Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
 
-// Generate AI insights using Google Gemini
+// Generates AI insights using Gemini to evaluate candidate fit for a job
 async function generateInsight(
   jobTitle: string,
   jobDescription: string,
@@ -81,7 +80,7 @@ Do not include any text outside the JSON object.`
   }
 }
 
-// Fallback heuristic-based insight generator
+// Provides basic skill-matching analysis when AI service is unavailable
 function generateFallbackInsight(skills: string[], whyFit: string, resumeText: string) {
   const insights: string[] = []
   let score = 50

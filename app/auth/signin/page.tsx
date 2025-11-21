@@ -4,6 +4,7 @@ import { signIn } from "@/lib/auth"
 import Navbar from "@/components/Navbar"
 import Image from "next/image"
 
+// Google OAuth sign-in page
 export default async function SignInPage({
   searchParams,
 }: {

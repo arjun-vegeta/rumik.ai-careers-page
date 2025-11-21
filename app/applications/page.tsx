@@ -6,6 +6,7 @@ import ApplicationsClient from "./ApplicationsClient"
 
 export const dynamic = 'force-dynamic'
 
+// Displays all job applications submitted by the current user
 export default async function ApplicationsPage() {
   const session = await auth()
 

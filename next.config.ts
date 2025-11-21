@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Speed up builds by optimizing common package imports
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'motion'],
   },
+  
+  // Image optimization settings for better performance and quality
   images: {
     qualities: [25, 50, 70, 90],
     formats: ['image/webp', 'image/avif'],

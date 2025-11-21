@@ -31,6 +31,7 @@ interface CandidatesClientProps {
   candidates: Candidate[];
 }
 
+// Client component for managing candidates for a specific job posting
 export default function CandidatesClient({ candidates: initialCandidates }: CandidatesClientProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,6 +46,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
     candidate.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Returns appropriate badge styling for candidate status
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "submitted":
@@ -60,10 +62,12 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
     }
   };
 
+  // Toggle expanded details view for a candidate
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  // Updates candidate application status
   const handleStatusChange = async (candidateId: string, newStatus: string) => {
     setUpdatingStatus(candidateId);
     try {
@@ -89,6 +93,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
     }
   };
 
+  // Generates AI-powered insights about candidate fit
   const generateAIInsights = async (candidateId: string) => {
     setGeneratingInsights(candidateId);
     try {

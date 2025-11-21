@@ -7,6 +7,7 @@ import { ParticleTransition } from "./ParticleTransition";
 import Image from "next/image";
 import TryIra from "./TryIra";
 
+// Wrapper for sections with scroll-triggered animations
 function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
@@ -23,6 +24,7 @@ function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; d
   );
 }
 
+// Interactive showcase of Ira's features with auto-rotating content
 function IraFeatureShowcase() {
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -47,15 +49,14 @@ function IraFeatureShowcase() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % 3);
-    }, 3000); // Change every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, [activeFeature]); // Reset interval when activeFeature changes
+  }, [activeFeature]);
 
   return (
     <AnimatedSection delay={0.2}>
       <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* Image Section - 2/3 width */}
         <div className="lg:col-span-2 relative">
           {features.map((feature, index) => (
             <motion.div
@@ -83,7 +84,6 @@ function IraFeatureShowcase() {
               />
             </motion.div>
           ))}
-          {/* Spacer to maintain height */}
           <Image 
             src={features[0].image} 
             alt="spacer" 
@@ -93,7 +93,6 @@ function IraFeatureShowcase() {
           />
         </div>
 
-        {/* Features Section - 1/3 width */}
         <div className="lg:col-span-1 flex flex-col justify-around h-full py-8 lg:py-12 space-y-6 lg:space-y-0">
           {features.map((feature, index) => (
             <div 
@@ -102,10 +101,8 @@ function IraFeatureShowcase() {
               onClick={() => setActiveFeature(index)}
             >
               <div className="relative pl-6 overflow-hidden w-full py-0 md:py-4">
-                {/* Static gray line */}
                 <div className="absolute left-0 top-0 w-0.5 h-full bg-gray-300" />
                 
-                {/* Animated black line on top */}
                 {activeFeature === index && (
                   <motion.div
                     key={`line-${index}`}
@@ -138,6 +135,7 @@ function IraFeatureShowcase() {
   );
 }
 
+// Animated hero with particle transition and chat messages
 function HeroAnimation() {
   const [showParticles, setShowParticles] = useState<boolean>(true);
   const [visibleMessages, setVisibleMessages] = useState<number>(0);
@@ -154,8 +152,8 @@ function HeroAnimation() {
     { role: "assistant" as const, content: "Always here for you! Aap akele nahi ho. Let's take it one step at a time 🌟", id: "6" },
   ];
 
+  // Display chat messages progressively after particle animation
   const handleParticleComplete = () => {
-    // Start showing messages while particles are still visible
     const interval = setInterval(() => {
       setVisibleMessages((prev) => {
         if (prev < messages.length) {
@@ -167,13 +165,12 @@ function HeroAnimation() {
     }, 900);
   };
 
-  // Reset animation when scrolling out of view
+  // Reset animation when scrolling back into view
   useEffect(() => {
     if (!isInView) {
       setShowParticles(false);
       setVisibleMessages(0);
     } else {
-      // Reset and replay when scrolling back into view
       setShowParticles(true);
       setVisibleMessages(0);
       setAnimationKey(prev => prev + 1);
@@ -183,7 +180,6 @@ function HeroAnimation() {
   useEffect(() => {
     if (!isInView) return;
     
-    // Hide particles after they complete their full animation (3s)
     const hideParticlesTimer = setTimeout(() => {
       setShowParticles(false);
     }, 3000);
@@ -193,12 +189,10 @@ function HeroAnimation() {
 
   return (
     <div ref={ref} className="relative w-full" style={{ height: "500px" }}>
-      {/* Particle Animation - stays visible until 3s */}
       {showParticles && (
         <ParticleTransition key={animationKey} onComplete={handleParticleComplete} />
       )}
 
-      {/* Chat Component - overlaps with particles */}
       <div className="absolute inset-0 space-y-4 overflow-hidden">
         {messages.slice(0, visibleMessages).map((message) => (
           <motion.div
@@ -224,9 +218,9 @@ function HeroAnimation() {
   );
 }
 
+// Main home page with hero, features, and call-to-action sections
 export default function NewHomePage() {
   useEffect(() => {
-    // Scroll to top on mount
     window.scrollTo(0, 0);
   }, []);
 

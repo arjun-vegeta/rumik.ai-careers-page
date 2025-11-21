@@ -2,15 +2,16 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+// Seed the database with initial job postings for rumik.ai
 async function main() {
-  // Clear existing data
+  // Start fresh by clearing existing data
   await prisma.aIInsight.deleteMany()
   await prisma.candidate.deleteMany()
   await prisma.job.deleteMany()
   
   console.log('Cleared existing job data')
 
-  // Engineering roles
+  // Engineering roles - core technical positions
   await prisma.job.create({
     data: {
       title: 'AI Research Engineer',
@@ -76,7 +77,7 @@ make it fast. make it beautiful. ship weekly`,
     },
   })
 
-  // Other roles
+  // Other roles - design, growth, and cross-functional positions
   await prisma.job.create({
     data: {
       title: 'Designer',
@@ -101,7 +102,7 @@ make it fast. make it beautiful. ship weekly`,
     },
   })
 
-  // Internships
+  // Internships - hands-on learning opportunities with PPO potential
   await prisma.job.create({
     data: {
       title: 'AI Research Engineering Intern',

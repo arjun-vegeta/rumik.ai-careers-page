@@ -25,6 +25,7 @@ interface ApplicationsClientProps {
   applications: Application[];
 }
 
+// Client component for browsing and filtering job applications
 export default function ApplicationsClient({ applications }: ApplicationsClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -39,10 +40,12 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
     return matchesSearch && matchesStatus;
   });
 
+  // Toggle expanded view for application details
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  // Returns color scheme based on application status
   const getStatusConfig = (status: string) => {
     switch (status) {
       case "submitted":

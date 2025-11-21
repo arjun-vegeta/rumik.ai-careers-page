@@ -3,17 +3,18 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 
+// Shows loading progress bar during page navigation
 export default function NavigationProgress() {
   const [isLoading, setIsLoading] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
-    // Use microtask to avoid synchronous setState warning
     Promise.resolve().then(() => {
       setIsLoading(false)
     })
   }, [pathname])
 
+  // Detect link clicks and show loading indicator
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
@@ -35,7 +36,6 @@ export default function NavigationProgress() {
 
   return (
     <>
-      {/* Progress bar at top */}
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-gray-200">
         <div 
           className="h-full bg-gradient-to-r from-black via-gray-700 to-black"
@@ -46,7 +46,6 @@ export default function NavigationProgress() {
         />
       </div>
       
-      {/* Full page subtle overlay */}
       <div className="fixed inset-0 z-40 bg-white bg-opacity-30 backdrop-blur-[2px] pointer-events-none" />
       
       <style jsx>{`

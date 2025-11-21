@@ -5,6 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
+// Generates AI-powered insights about candidate-job fit using Gemini
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -117,6 +118,7 @@ Be objective, concise, and focus on skills match, experience relevance, and cult
   }
 }
 
+// Retrieves existing AI insights for a candidate
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }

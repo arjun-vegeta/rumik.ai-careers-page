@@ -1,5 +1,9 @@
 import { Resend } from 'resend'
 
+// ============================================
+// Email Service Configuration
+// ============================================
+
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 interface SendApplicationConfirmationParams {
@@ -9,6 +13,7 @@ interface SendApplicationConfirmationParams {
   companyName?: string
 }
 
+// Sends a confirmation email to candidates after they submit their application
 export async function sendApplicationConfirmation({
   candidateName,
   candidateEmail,
@@ -73,7 +78,6 @@ export async function sendApplicationConfirmation({
     return { success: true }
   } catch (error) {
     console.error("Error sending email:", error)
-    // Don't throw error - we don't want email failures to break the application submission
     return { success: false, error }
   }
 }

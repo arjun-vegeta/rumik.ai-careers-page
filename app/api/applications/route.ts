@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { uploadResume } from "@/lib/supabase"
 import { sendApplicationConfirmation } from "@/lib/email"
 
+// Handles job application submissions with resume upload
 export async function POST(req: NextRequest) {
   try {
     const session = await auth()

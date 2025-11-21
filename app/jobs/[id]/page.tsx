@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar"
 
 export const dynamic = 'force-dynamic'
 
+// Displays full job posting details with application form
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const job = await prisma.job.findUnique({

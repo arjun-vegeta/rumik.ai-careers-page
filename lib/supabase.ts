@@ -1,10 +1,15 @@
 import { createClient } from "@supabase/supabase-js"
 
+// ============================================
+// Supabase Storage Configuration
+// ============================================
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
+// Uploads candidate resume to Supabase storage and returns public URL
 export async function uploadResume(file: File, candidateId: string): Promise<string> {
   const fileExt = file.name.split(".").pop()
   const fileName = `${candidateId}-${Date.now()}.${fileExt}`
@@ -21,7 +26,6 @@ export async function uploadResume(file: File, candidateId: string): Promise<str
     throw new Error(`Failed to upload resume: ${error.message}`)
   }
 
-  // Get public URL
   const { data: urlData } = supabase.storage
     .from("resumes")
     .getPublicUrl(filePath)

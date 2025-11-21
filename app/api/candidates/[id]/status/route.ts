@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
+// Updates the status of a candidate application
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
