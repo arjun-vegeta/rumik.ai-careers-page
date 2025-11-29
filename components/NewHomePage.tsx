@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Brain, Heart, Globe } from "lucide-react";
 import { ParticleTransition } from "./ParticleTransition";
 import Image from "next/image";
 import TryIra from "./TryIra";
@@ -24,112 +24,49 @@ function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; d
 }
 
 function IraFeatureShowcase() {
-  const [activeFeature, setActiveFeature] = useState(0);
-
   const features = [
     {
-      title: "Understands Intent",
-      description: "Ira doesn't just hear words—she understands what you really mean.",
-      image: "/irademo1.webp"
+      title: "Understands your intent",
+      icon: Brain
     },
     {
-      title: "Infers Emotions",
-      description: "She picks up on how you feel and responds with genuine empathy.",
-      image: "/irademo2.webp"
+      title: "Gets your emotions",
+      icon: Heart
     },
     {
-      title: "Multilingual",
-      description: "Converses naturally in Hinglish, Bangla, Marathi, and more.",
-      image: "/irademo3.webp"
+      title: "Converse in Hinglish, Bangla, Marathi and more",
+      icon: Globe
     }
   ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % 3);
-    }, 3000); // Change every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [activeFeature]); // Reset interval when activeFeature changes
 
   return (
     <AnimatedSection delay={0.2}>
       <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Image Section - 2/3 width */}
-        <div className="lg:col-span-2 relative">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0 }}
-              animate={{ 
-                opacity: activeFeature === index ? 1 : 0
-              }}
-              transition={{ 
-                duration: 0.5,
-                ease: "easeInOut"
-              }}
-              className="absolute inset-0"
-              style={{ 
-                pointerEvents: activeFeature === index ? 'auto' : 'none'
-              }}
-            >
-              <Image 
-                src={feature.image} 
-                alt={feature.title} 
-                width={800}
-                height={600}
-                className="w-full h-auto"
-                priority={index === 0}
-              />
-            </motion.div>
-          ))}
-          {/* Spacer to maintain height */}
+        <div className="lg:col-span-2">
           <Image 
-            src={features[0].image} 
-            alt="spacer" 
+            src="/irademo1.webp" 
+            alt="Ira Demo" 
             width={800}
             height={600}
-            className="w-full h-auto opacity-0"
+            className="w-full h-auto"
+            priority
           />
         </div>
 
         {/* Features Section - 1/3 width */}
-        <div className="lg:col-span-1 flex flex-col justify-around h-full py-8 lg:py-12 space-y-6 lg:space-y-0">
+        <div className="lg:col-span-1 flex flex-col justify-center h-full py-8 lg:py-12 space-y-4 lg:space-y-24">
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="relative cursor-pointer flex-1 flex items-center"
-              onClick={() => setActiveFeature(index)}
+              className="flex items-center gap-4"
             >
-              <div className="relative pl-6 overflow-hidden w-full py-0 md:py-4">
-                {/* Static gray line */}
-                <div className="absolute left-0 top-0 w-0.5 h-full bg-gray-300" />
-                
-                {/* Animated black line on top */}
-                {activeFeature === index && (
-                  <motion.div
-                    key={`line-${index}`}
-                    className="absolute left-0 top-0 w-0.5 bg-black"
-                    initial={{ height: "0%" }}
-                    animate={{ height: "100%" }}
-                    exit={{ opacity: 0 }}
-                    transition={{ 
-                      height: { duration: 3, ease: "linear" },
-                      opacity: { duration: 0.3 }
-                    }}
-                  />
-                )}
-                <p className={`text-xl md:text-2xl font-[500] mb-2 transition-colors duration-500 ${
-                  activeFeature === index ? "text-black" : "text-gray-400"
-                }`}>
-                  {feature.title}
-                </p>
-                <p className={`text-base transition-colors duration-500 ${
-                  activeFeature === index ? "text-gray-700" : "text-gray-400"
-                }`}>
-                  {feature.description}
-                </p>
+              <div className="flex-shrink-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-black flex items-center justify-center">
+                <feature.icon className="md:w-6 md:h-6 w-4 h-4 text-white" />
               </div>
+              <p className="text-lg md:text-2xl font-[400] text-black">
+                {feature.title}
+              </p>
             </div>
           ))}
         </div>
