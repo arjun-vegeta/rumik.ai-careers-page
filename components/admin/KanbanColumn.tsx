@@ -33,7 +33,7 @@ export default function KanbanColumn({
   onScheduleInterview,
 }: KanbanColumnProps) {
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[240px] max-w-[260px] h-full">
+    <div className="flex flex-col bg-gray-100 rounded-xl min-w-[240px] max-w-[260px] h-full">
       {/* Column header */}
       <div className={`px-3 py-2.5 rounded-t-xl ${color}`}>
         <div className="flex items-center justify-between">
@@ -51,7 +51,7 @@ export default function KanbanColumn({
             ref={provided.innerRef}
             {...provided.droppableProps}
             className={`flex-1 p-1.5 overflow-y-auto min-h-[200px] transition-colors ${
-              snapshot.isDraggingOver ? "bg-gray-100" : ""
+              snapshot.isDraggingOver ? "bg-gray-200" : ""
             }`}
           >
             {candidates.map((candidate, index) => (

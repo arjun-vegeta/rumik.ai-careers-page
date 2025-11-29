@@ -26,7 +26,7 @@ export default function FinalColumn({
 }: FinalColumnProps) {
 
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[240px] max-w-[260px] h-full">
+    <div className="flex flex-col bg-gray-100 rounded-xl min-w-[240px] max-w-[260px] h-full">
       {/* Column header */}
       <div className="px-3 py-2.5 rounded-t-xl bg-gray-200">
         <div className="flex items-center justify-between">
