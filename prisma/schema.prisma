@@ -54,12 +54,29 @@ model Candidate {
   contact     String
   resumeUrl   String
   resumeText  String?     @db.Text
-  status      String      @default("submitted") // submitted, in_review, selected, rejected, withdrawn
+  status      String      @default("applied") // applied, round_1, round_2, round_3, selected, rejected, withdrawn
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   aiInsights  AIInsight[]
+  rounds      CandidateRound[]
   
   @@unique([userId, jobId])
+}
+
+// Tracks notes, ratings, and interview details for each interview round
+model CandidateRound {
+  id            String    @id @default(cuid())
+  candidateId   String
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  round         String    // "round_1", "round_2", "round_3"
+  notes         String?   @db.Text
+  rating        Int?      // 1-5 star rating
+  interviewer   String?   // Name of the interviewer
+  interviewDate DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@unique([candidateId, round])
 }
 
 model AIInsight {

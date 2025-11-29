@@ -47,14 +47,23 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "submitted":
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Submitted</Badge>;
-      case "in_review":
-        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">In Review</Badge>;
+      case "applied":
+        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Applied</Badge>;
+      case "round_1":
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Round 1</Badge>;
+      case "round_2":
+        return <Badge className="bg-orange-100 text-orange-800 border-orange-200">Round 2</Badge>;
+      case "round_3":
+        return <Badge className="bg-purple-100 text-purple-800 border-purple-200">Round 3</Badge>;
       case "selected":
         return <Badge className="bg-green-100 text-green-800 border-green-200">Selected</Badge>;
       case "rejected":
         return <Badge className="bg-red-100 text-red-800 border-red-200">Rejected</Badge>;
+      // Legacy status support
+      case "submitted":
+        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Applied</Badge>;
+      case "in_review":
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Round 1</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -174,22 +183,28 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                       >
                         <SelectTrigger 
                           className={`w-[140px] h-8 text-xs font-medium ${
-                            candidate.status === "submitted" 
+                            candidate.status === "applied" 
                               ? "bg-blue-50 text-blue-800 border-blue-200" 
-                              : candidate.status === "in_review"
+                              : candidate.status === "round_1"
                               ? "bg-yellow-50 text-yellow-800 border-yellow-200"
+                              : candidate.status === "round_2"
+                              ? "bg-orange-50 text-orange-800 border-orange-200"
+                              : candidate.status === "round_3"
+                              ? "bg-purple-50 text-purple-800 border-purple-200"
                               : candidate.status === "selected"
                               ? "bg-green-50 text-green-800 border-green-200"
                               : candidate.status === "rejected"
                               ? "bg-red-50 text-red-800 border-red-200"
-                              : ""
+                              : "bg-gray-50 text-gray-800 border-gray-200"
                           }`}
                         >
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="submitted" className="text-blue-800">Submitted</SelectItem>
-                          <SelectItem value="in_review" className="text-yellow-800">In Review</SelectItem>
+                          <SelectItem value="applied" className="text-blue-800">Applied</SelectItem>
+                          <SelectItem value="round_1" className="text-yellow-800">Round 1</SelectItem>
+                          <SelectItem value="round_2" className="text-orange-800">Round 2</SelectItem>
+                          <SelectItem value="round_3" className="text-purple-800">Round 3</SelectItem>
                           <SelectItem value="selected" className="text-green-800">Selected</SelectItem>
                           <SelectItem value="rejected" className="text-red-800">Rejected</SelectItem>
                         </SelectContent>
@@ -382,22 +397,28 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                   >
                     <SelectTrigger 
                       className={`w-full h-9 text-xs font-medium ${
-                        candidate.status === "submitted" 
+                        candidate.status === "applied" 
                           ? "bg-blue-50 text-blue-800 border-blue-200" 
-                          : candidate.status === "in_review"
+                          : candidate.status === "round_1"
                           ? "bg-yellow-50 text-yellow-800 border-yellow-200"
+                          : candidate.status === "round_2"
+                          ? "bg-orange-50 text-orange-800 border-orange-200"
+                          : candidate.status === "round_3"
+                          ? "bg-purple-50 text-purple-800 border-purple-200"
                           : candidate.status === "selected"
                           ? "bg-green-50 text-green-800 border-green-200"
                           : candidate.status === "rejected"
                           ? "bg-red-50 text-red-800 border-red-200"
-                          : ""
+                          : "bg-gray-50 text-gray-800 border-gray-200"
                       }`}
                     >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="submitted" className="text-blue-800">Submitted</SelectItem>
-                      <SelectItem value="in_review" className="text-yellow-800">In Review</SelectItem>
+                      <SelectItem value="applied" className="text-blue-800">Applied</SelectItem>
+                      <SelectItem value="round_1" className="text-yellow-800">Round 1</SelectItem>
+                      <SelectItem value="round_2" className="text-orange-800">Round 2</SelectItem>
+                      <SelectItem value="round_3" className="text-purple-800">Round 3</SelectItem>
                       <SelectItem value="selected" className="text-green-800">Selected</SelectItem>
                       <SelectItem value="rejected" className="text-red-800">Rejected</SelectItem>
                     </SelectContent>
