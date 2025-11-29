@@ -45,10 +45,14 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "submitted":
-        return { label: "Submitted", className: "bg-blue-50 text-blue-800 border-blue-200" };
-      case "in_review":
-        return { label: "In Review", className: "bg-yellow-50 text-yellow-800 border-yellow-200" };
+      case "applied":
+        return { label: "Applied", className: "bg-blue-50 text-blue-800 border-blue-200" };
+      case "round_1":
+        return { label: "Round 1", className: "bg-yellow-50 text-yellow-800 border-yellow-200" };
+      case "round_2":
+        return { label: "Round 2", className: "bg-orange-50 text-orange-800 border-orange-200" };
+      case "round_3":
+        return { label: "Round 3", className: "bg-purple-50 text-purple-800 border-purple-200" };
       case "selected":
         return { label: "Selected", className: "bg-green-50 text-green-800 border-green-200" };
       case "rejected":
@@ -80,8 +84,10 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="submitted">Submitted</SelectItem>
-            <SelectItem value="in_review">In Review</SelectItem>
+            <SelectItem value="applied">Applied</SelectItem>
+            <SelectItem value="round_1">Round 1</SelectItem>
+            <SelectItem value="round_2">Round 2</SelectItem>
+            <SelectItem value="round_3">Round 3</SelectItem>
             <SelectItem value="selected">Selected</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
             <SelectItem value="withdrawn">Withdrawn</SelectItem>
@@ -151,7 +157,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex justify-end gap-2">
-                          {application.status === "submitted" && (
+                          {application.status === "applied" && (
                             <WithdrawButton applicationId={application.id} />
                           )}
                           <Button
@@ -270,7 +276,7 @@ export default function ApplicationsClient({ applications }: ApplicationsClientP
                       View Resume
                     </Button>
                   </a>
-                  {application.status === "submitted" && (
+                  {application.status === "applied" && (
                     <WithdrawButton applicationId={application.id} />
                   )}
                   <Button

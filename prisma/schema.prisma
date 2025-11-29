@@ -55,6 +55,7 @@ model Candidate {
   resumeUrl   String
   resumeText  String?     @db.Text
   status      String      @default("applied") // applied, round_1, round_2, round_3, selected, rejected, withdrawn
+  finalEmailSent Boolean  @default(false) // Track if offer/rejection email was sent
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   aiInsights  AIInsight[]
@@ -73,6 +74,7 @@ model CandidateRound {
   rating        Int?      // 1-5 star rating
   interviewer   String?   // Name of the interviewer
   interviewDate DateTime?
+  interviewEmailSent Boolean @default(false) // Track if interview invitation email was sent
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   

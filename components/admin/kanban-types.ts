@@ -7,6 +7,7 @@ export interface CandidateRound {
   rating?: number | null;
   interviewer?: string | null;
   interviewDate?: string | null;
+  interviewEmailSent?: boolean;
 }
 
 export interface KanbanCandidate {
@@ -14,6 +15,13 @@ export interface KanbanCandidate {
   name: string;
   email: string;
   status: string;
+  contact?: string | null;
+  linkedin?: string | null;
+  github?: string | null;
+  portfolio?: string | null;
+  resumeUrl?: string | null;
+  whyFit?: string | null;
+  finalEmailSent?: boolean;
   job: {
     id: string;
     title: string;

@@ -11,6 +11,11 @@ interface KanbanColumnProps {
   color: string;
   showJobTitle: boolean;
   onAddNotes: (candidateId: string, round: string) => void;
+  onCardClick: (candidateId: string) => void;
+  onMoveToNextRound?: (candidateId: string, currentRound: string) => void;
+  onReject?: (candidateId: string) => void;
+  scheduledInterviews?: Record<string, boolean>;
+  onScheduleInterview?: (candidateId: string, round: string) => void;
 }
 
 // A single column in the Kanban board that accepts draggable cards
@@ -21,11 +26,16 @@ export default function KanbanColumn({
   color,
   showJobTitle,
   onAddNotes,
+  onCardClick,
+  onMoveToNextRound,
+  onReject,
+  scheduledInterviews = {},
+  onScheduleInterview,
 }: KanbanColumnProps) {
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[260px] max-w-[280px] h-full">
+    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[240px] max-w-[260px] h-full">
       {/* Column header */}
-      <div className={`px-3 py-3 rounded-t-xl ${color}`}>
+      <div className={`px-3 py-2.5 rounded-t-xl ${color}`}>
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-sm text-gray-800">{title}</h3>
           <span className="bg-white/80 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">
@@ -40,7 +50,7 @@ export default function KanbanColumn({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`flex-1 p-2 overflow-y-auto min-h-[200px] transition-colors ${
+            className={`flex-1 p-1.5 overflow-y-auto min-h-[200px] transition-colors ${
               snapshot.isDraggingOver ? "bg-gray-100" : ""
             }`}
           >
@@ -51,6 +61,11 @@ export default function KanbanColumn({
                 index={index}
                 showJobTitle={showJobTitle}
                 onAddNotes={onAddNotes}
+                onCardClick={onCardClick}
+                onMoveToNextRound={onMoveToNextRound}
+                onReject={onReject}
+                isScheduled={scheduledInterviews[`${candidate.id}-${candidate.status}`]}
+                onScheduleInterview={onScheduleInterview}
               />
             ))}
             {provided.placeholder}

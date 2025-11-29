@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import KanbanBoard from "@/components/admin/KanbanBoard";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+
 
 // Kanban-style candidate pipeline board for recruiters
 export default async function CandidateBoardPage() {
@@ -14,36 +13,46 @@ export default async function CandidateBoardPage() {
   }
 
   // Fetch all candidates with their job info and round data
-  const candidatesData = await prisma.candidate.findMany({
-    where: {
-      status: { not: "withdrawn" },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      status: true,
-      job: {
-        select: {
-          id: true,
-          title: true,
-        },
-      },
-      rounds: {
-        select: {
-          id: true,
-          round: true,
-          notes: true,
-          rating: true,
-          interviewer: true,
-          interviewDate: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const candidatesData = await prisma.$queryRaw`
+    SELECT 
+      c.id, c.name, c.email, c.contact, c.linkedin, c.github, c.portfolio, c."resumeUrl", c.status, c."whyFit", c."finalEmailSent",
+      j.id as "jobId", j.title as "jobTitle"
+    FROM "Candidate" c
+    JOIN "Job" j ON c."jobId" = j.id
+    WHERE c.status != 'withdrawn'
+    ORDER BY c."createdAt" DESC
+  ` as Array<{
+    id: string;
+    name: string;
+    email: string;
+    contact: string;
+    linkedin: string | null;
+    github: string | null;
+    portfolio: string | null;
+    resumeUrl: string;
+    status: string;
+    whyFit: string | null;
+    finalEmailSent: boolean;
+    jobId: string;
+    jobTitle: string;
+  }>;
+
+  // Fetch rounds separately
+  const candidateIds = candidatesData.map(c => c.id);
+  const roundsData = candidateIds.length > 0 ? await prisma.$queryRaw`
+    SELECT id, "candidateId", round, notes, rating, interviewer, "interviewDate", "interviewEmailSent"
+    FROM "CandidateRound"
+    WHERE "candidateId" = ANY(${candidateIds})
+  ` as Array<{
+    id: string;
+    candidateId: string;
+    round: string;
+    notes: string | null;
+    rating: number | null;
+    interviewer: string | null;
+    interviewDate: Date | null;
+    interviewEmailSent: boolean;
+  }> : [];
 
   // Fetch all active jobs for the filter dropdown
   const jobs = await prisma.job.findMany({
@@ -58,47 +67,44 @@ export default async function CandidateBoardPage() {
   });
 
   // Transform candidates to match expected type
-  const transformedCandidates = candidatesData.map((c) => ({
-    id: c.id,
-    name: c.name,
-    email: c.email,
-    status: c.status,
-    job: c.job,
-    rounds: c.rounds.map((r) => ({
-      id: r.id,
-      round: r.round,
-      notes: r.notes,
-      rating: r.rating,
-      interviewer: r.interviewer,
-      interviewDate: r.interviewDate?.toISOString() || null,
-    })),
-  }));
+  const transformedCandidates = candidatesData.map((c) => {
+    const candidateRounds = roundsData.filter(r => r.candidateId === c.id);
+    return {
+      id: c.id,
+      name: c.name,
+      email: c.email,
+      contact: c.contact,
+      linkedin: c.linkedin,
+      github: c.github,
+      portfolio: c.portfolio,
+      resumeUrl: c.resumeUrl,
+      whyFit: c.whyFit,
+      status: c.status,
+      finalEmailSent: c.finalEmailSent,
+      job: {
+        id: c.jobId,
+        title: c.jobTitle,
+      },
+      rounds: candidateRounds.map((r) => ({
+        id: r.id,
+        round: r.round,
+        notes: r.notes,
+        rating: r.rating,
+        interviewer: r.interviewer,
+        interviewDate: r.interviewDate?.toISOString() || null,
+        interviewEmailSent: r.interviewEmailSent,
+      })),
+    };
+  });
 
   return (
-    <div className="min-h-screen bg-[#FCFAF7]">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/candidates"
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <ArrowLeft size={20} />
-              <span className="text-sm font-medium">Back to Table View</span>
-            </Link>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Candidate Pipeline</h1>
-          <div className="w-[180px]" /> {/* Spacer for centering */}
-        </div>
-
-        {/* Kanban board */}
-        <div className="h-[calc(100vh-140px)]">
-          <KanbanBoard 
-            initialCandidates={transformedCandidates} 
-            jobs={jobs} 
-          />
-        </div>
+    <div className="w-full min-w-0">
+      {/* Kanban board */}
+      <div className="h-[calc(100vh-200px)]">
+        <KanbanBoard 
+          initialCandidates={transformedCandidates} 
+          jobs={jobs} 
+        />
       </div>
     </div>
   );

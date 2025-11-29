@@ -9,6 +9,9 @@ interface FinalColumnProps {
   rejectedCandidates: KanbanCandidate[];
   showJobTitle: boolean;
   onAddNotes: (candidateId: string, round: string) => void;
+  onCardClick: (candidateId: string) => void;
+  sentEmails: Record<string, boolean>;
+  onEmailSent: (candidateId: string) => void;
 }
 
 // Special column that contains both Selected (top) and Rejected (bottom) sections
@@ -17,11 +20,15 @@ export default function FinalColumn({
   rejectedCandidates,
   showJobTitle,
   onAddNotes,
+  onCardClick,
+  sentEmails,
+  onEmailSent,
 }: FinalColumnProps) {
+
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[260px] max-w-[280px] h-full">
+    <div className="flex flex-col bg-gray-50 rounded-xl min-w-[240px] max-w-[260px] h-full">
       {/* Column header */}
-      <div className="px-3 py-3 rounded-t-xl bg-gray-200">
+      <div className="px-3 py-2.5 rounded-t-xl bg-gray-200">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-sm text-gray-800">Final</h3>
           <span className="bg-white/80 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">
@@ -32,7 +39,7 @@ export default function FinalColumn({
 
       {/* Selected section */}
       <div className="border-b border-gray-200">
-        <div className="px-3 py-2 bg-green-50 flex items-center justify-between">
+        <div className="px-3 py-1.5 bg-green-50 flex items-center justify-between">
           <span className="text-xs font-medium text-green-700 flex items-center gap-1">
             ✓ Selected
           </span>
@@ -43,7 +50,7 @@ export default function FinalColumn({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={`p-2 min-h-[100px] transition-colors ${
+              className={`p-1.5 min-h-[80px] transition-colors ${
                 snapshot.isDraggingOver ? "bg-green-50" : ""
               }`}
             >
@@ -54,6 +61,9 @@ export default function FinalColumn({
                   index={index}
                   showJobTitle={showJobTitle}
                   onAddNotes={onAddNotes}
+                  onCardClick={onCardClick}
+                  isEmailSent={sentEmails[candidate.id]}
+                  onEmailSent={onEmailSent}
                 />
               ))}
               {provided.placeholder}
@@ -70,7 +80,7 @@ export default function FinalColumn({
 
       {/* Rejected section */}
       <div className="flex-1">
-        <div className="px-3 py-2 bg-red-50 flex items-center justify-between">
+        <div className="px-3 py-1.5 bg-red-50 flex items-center justify-between">
           <span className="text-xs font-medium text-red-700 flex items-center gap-1">
             ✗ Rejected
           </span>
@@ -81,7 +91,7 @@ export default function FinalColumn({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={`p-2 min-h-[100px] transition-colors ${
+              className={`p-1.5 min-h-[80px] transition-colors ${
                 snapshot.isDraggingOver ? "bg-red-50" : ""
               }`}
             >
@@ -92,6 +102,9 @@ export default function FinalColumn({
                   index={index}
                   showJobTitle={showJobTitle}
                   onAddNotes={onAddNotes}
+                  onCardClick={onCardClick}
+                  isEmailSent={sentEmails[candidate.id]}
+                  onEmailSent={onEmailSent}
                 />
               ))}
               {provided.placeholder}

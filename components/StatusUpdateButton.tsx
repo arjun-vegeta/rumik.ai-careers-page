@@ -47,10 +47,14 @@ export default function StatusUpdateButton({ candidateId, currentStatus }: Statu
 
   const getStatusColor = (s: string) => {
     switch (s) {
-      case "submitted":
+      case "applied":
         return "text-blue-600"
-      case "in_review":
+      case "round_1":
         return "text-yellow-600"
+      case "round_2":
+        return "text-orange-600"
+      case "round_3":
+        return "text-purple-600"
       case "selected":
         return "text-green-600"
       case "rejected":
@@ -70,8 +74,10 @@ export default function StatusUpdateButton({ candidateId, currentStatus }: Statu
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="submitted">Submitted</SelectItem>
-          <SelectItem value="in_review">In Review</SelectItem>
+          <SelectItem value="applied">Applied</SelectItem>
+          <SelectItem value="round_1">Round 1</SelectItem>
+          <SelectItem value="round_2">Round 2</SelectItem>
+          <SelectItem value="round_3">Round 3</SelectItem>
           <SelectItem value="selected">Selected</SelectItem>
           <SelectItem value="rejected">Rejected</SelectItem>
         </SelectContent>

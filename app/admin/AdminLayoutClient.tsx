@@ -13,12 +13,14 @@ export default function AdminLayoutClient({
   const pathname = usePathname();
   const router = useRouter();
   const isJobsPage = pathname === "/admin";
-  const isCandidatesPage = pathname?.startsWith("/admin/candidates");
+  const isCandidatesPage = pathname === "/admin/candidates" || pathname?.startsWith("/admin/candidates/") && !pathname?.includes("/board");
+  const isBoardPage = pathname === "/admin/candidates/board";
 
   // Prefetch admin routes on mount for instant navigation
   useEffect(() => {
     router.prefetch("/admin");
     router.prefetch("/admin/candidates");
+    router.prefetch("/admin/candidates/board");
   }, [router]);
 
   return (
@@ -58,12 +60,26 @@ export default function AdminLayoutClient({
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
                 )}
               </Link>
+              <Link 
+                href="/admin/candidates/board"
+                prefetch={true}
+                className={`flex-1 md:flex-none px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-medium transition-colors relative text-center ${
+                  isBoardPage
+                    ? "text-black"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Tracking Board
+                {isBoardPage && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                )}
+              </Link>
             </div>
           </nav>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
+      <main className={`${isBoardPage ? 'max-w-[1340px] mx-auto' : 'max-w-7xl mx-auto'} px-4 md:px-8 py-6 md:py-8`}>
         {children}
       </main>
     </div>

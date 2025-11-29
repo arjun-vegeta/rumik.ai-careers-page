@@ -63,7 +63,7 @@ export default async function CandidatesPage() {
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm md:text-base"
         >
           <LayoutGrid size={18} />
-          Pipeline Board
+          Tracking Board
         </Link>
       </div>
 
